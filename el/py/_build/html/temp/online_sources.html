@@ -1,0 +1,199 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>online_sources module &#8212; LiteRef Server 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-online_sources">
+<span id="online-sources-module"></span><h1>online_sources module<a class="headerlink" href="#module-online_sources" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="online_sources.DBLP">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">DBLP</code><a class="headerlink" href="#online_sources.DBLP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="staticmethod">
+<dt id="online_sources.DBLP.afterLinkForBib">
+<em class="property">static </em><code class="descname">afterLinkForBib</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DBLP.afterLinkForBib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.DBLP.allBibLinks">
+<em class="property">static </em><code class="descname">allBibLinks</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DBLP.allBibLinks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.DBLP.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DBLP.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DBLP.name">
+<code class="descname">name</code><em class="property"> = 'DBLP'</em><a class="headerlink" href="#online_sources.DBLP.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DBLP.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'http://dblp.uni-trier.de/search?q='</em><a class="headerlink" href="#online_sources.DBLP.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="online_sources.GoogleScholar">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">GoogleScholar</code><a class="headerlink" href="#online_sources.GoogleScholar" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="staticmethod">
+<dt id="online_sources.GoogleScholar.afterLinkForBib">
+<em class="property">static </em><code class="descname">afterLinkForBib</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.GoogleScholar.afterLinkForBib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.GoogleScholar.afterLinkForPDF">
+<em class="property">static </em><code class="descname">afterLinkForPDF</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.GoogleScholar.afterLinkForPDF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.GoogleScholar.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.GoogleScholar.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.GoogleScholar.name">
+<code class="descname">name</code><em class="property"> = 'Google Scholar'</em><a class="headerlink" href="#online_sources.GoogleScholar.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.GoogleScholar.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'https://scholar.google.co.il/scholar?q='</em><a class="headerlink" href="#online_sources.GoogleScholar.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.GoogleScholar.redirections">
+<code class="descname">redirections</code><em class="property"> = True</em><a class="headerlink" href="#online_sources.GoogleScholar.redirections" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="online_sources.SemanticScholar">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">SemanticScholar</code><a class="headerlink" href="#online_sources.SemanticScholar" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="staticmethod">
+<dt id="online_sources.SemanticScholar.afterLinkForPDF">
+<em class="property">static </em><code class="descname">afterLinkForPDF</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.SemanticScholar.afterLinkForPDF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.SemanticScholar.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.SemanticScholar.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.SemanticScholar.name">
+<code class="descname">name</code><em class="property"> = 'Semantic Scholar'</em><a class="headerlink" href="#online_sources.SemanticScholar.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.SemanticScholar.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'https://semanticscholar.org/search?q='</em><a class="headerlink" href="#online_sources.SemanticScholar.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.SemanticScholar.searchPageElementName">
+<code class="descname">searchPageElementName</code><em class="property"> = 'paper-link'</em><a class="headerlink" href="#online_sources.SemanticScholar.searchPageElementName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">LiteRef Server</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Meir Goldenberg.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/temp/online_sources.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

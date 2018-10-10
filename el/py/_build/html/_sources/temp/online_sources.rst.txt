@@ -1,0 +1,7 @@
+online\_sources module
+======================
+
+.. automodule:: online_sources
+    :members:
+    :undoc-members:
+    :show-inheritance:
