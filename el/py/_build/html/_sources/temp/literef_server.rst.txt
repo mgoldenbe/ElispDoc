@@ -1,0 +1,7 @@
+literef\_server module
+======================
+
+.. automodule:: literef_server
+    :members:
+    :undoc-members:
+    :show-inheritance:

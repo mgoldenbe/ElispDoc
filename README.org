@@ -1,0 +1,3025 @@
+# #+OPTIONS:   num:t
+# -*- org-edit-src-content-indentation: 0; -*-
+# #+TITLE: LiteRef: a Framework for Managing Knowledge of Research Literature
+
+* Table of contents                                                     :TOC:
+- [[#user-content-intro][1 Introduction]]
+- [[#user-content-design][2 The overall design]]
+  - [[#user-content-phys][2.1 Physical structure]]
+  - [[#user-content-import][2.2 Import of entries]]
+  - [[#user-content-ui][2.3 The user interface]]
+  - [[#user-content-cite][2.4 Paper citations]]
+- [[#user-content-features][3 Features]]
+  - [[#user-content-import-bib][3.1 Importing BibTeX entries]]
+    + [[#user-content-import-bib-drop][3.1.1 By putting a /.bib/ file into the =drop/= folder]]
+    + [[#user-content-import-bib-clipboard][3.1.2 By copying a BibTeX entry into the clipboard]]
+    + [[#user-content-import-search-online][3.1.3 By searching in online sources]]
+    + [[#user-content-import-html][3.1.4 By downloading an HTML containing a number of papers]]
+  - [[#user-content-working-cite][3.2 Working with citations]]
+    + [[#user-content-search][3.2.1 Searching the papers database]]
+    + [[#user-content-copy-paste][3.2.2 Intelligent handling of copying and pasting citations]]
+    + [[#user-content-split][3.2.3 Splitting a multi-paper citation]]
+    + [[#user-content-actions][3.2.4 Actions on a paper]]
+  - [[#user-content-import-pdf][3.3 Importing PDF of a paper]]
+  - [[#user-content-working-pdf][3.4 Working with PDF]]
+  - [[#user-content-basic-export][3.5 Basic export of notes]]
+  - [[#user-content-df][3.6 Defining and using citation functions]]
+  - [[#user-content-subgraph][3.7 The citation (sub-)graph]]
+    + [[#user-content-graph-notion][3.7.1 The notion of the citation graph]]
+    + [[#user-content-subgraph-notion][3.7.2 The notion of the citation subgraph]]
+    + [[#user-content-subgraph-build][3.7.3 Building a citation subgraph]]
+  - [[#user-content-subgraph-operations][3.8 Operations on the citation subgraph]]
+    + [[#user-content-subgraph-vis][3.8.1 Visualization]]
+    + [[#user-content-subgraph-search][3.8.2 Search]]
+    + [[#user-content-subgraph-export][3.8.3 Export]]
+    + [[#user-content-subgraph-vis-export][3.8.4 Visualization in export]]
+- [[#user-content-install][4 Installation and configuration]]
+    + [[#user-content-install-auto][4.1 Automated installation]]
+    + [[#user-content-install-manual][4.2 Manual installation]]
+    + [[#user-content-config][4.3 Configuration]]
+- [[#user-content-license][5 Version and license information]]
+- [[#user-content-future][6 Bug reports and future work]]
+- [[#user-content-api][7 The API]]
+  - [[#user-content-module-literef][7.1 Module literef.el]] -- the main module.
+    - [[#user-content-funcs-module-literef][7.1.a Functions]]
+      - [[#user-content-func-literef-completion-fallback-candidates][7.1.a.1 literef-completion-fallback-candidates]]
+      - [[#user-content-func-literef-install-packages][7.1.a.2 literef-install-packages]]
+    - [[#user-content-vars-module-literef][7.1.b Variables]]
+  - [[#user-content-module-literef-citation-functions][7.2 Module literef-citation-functions.el]] -- implementation of the citation function link and the associated functionality.
+    - [[#user-content-funcs-module-literef-citation-functions][7.2.a Functions]]
+      - [[#user-content-func-literef-citation-function][7.2.a.1 literef-citation-function]]
+      - [[#user-content-func-literef-citation-function-help-echo][7.2.a.2 literef-citation-function-help-echo]]
+      - [[#user-content-func-literef-input-functions][7.2.a.3 literef-input-functions]]
+    - [[#user-content-vars-module-literef-citation-functions][7.2.b Variables]]
+  - [[#user-content-module-literef-citation-link][7.3 Module literef-citation-link.el]] -- functions for handling citation links.
+    - [[#user-content-funcs-module-literef-citation-link][7.3.a Functions]]
+      - [[#user-content-func-literef-after-citation-type-p][7.3.a.1 literef-after-citation-type-p]]
+      - [[#user-content-func-literef-after-string-p][7.3.a.2 literef-after-string-p]]
+      - [[#user-content-func-literef-bibtex-from-clipboard][7.3.a.3 literef-bibtex-from-clipboard]]
+      - [[#user-content-func-literef-cite-onclick-function][7.3.a.4 literef-cite-onclick-function]]
+      - [[#user-content-func-literef-copy-current-key][7.3.a.5 literef-copy-current-key]]
+      - [[#user-content-func-literef-insert-for-yank][7.3.a.6 literef-insert-for-yank]]
+      - [[#user-content-func-literef-key-string][7.3.a.7 literef-key-string]]
+      - [[#user-content-func-literef-sort-citation-link][7.3.a.8 literef-sort-citation-link]]
+      - [[#user-content-func-literef-sort-citation-links][7.3.a.9 literef-sort-citation-links]]
+      - [[#user-content-func-literef-sort-keys][7.3.a.10 literef-sort-keys]]
+      - [[#user-content-func-literef-split-cite][7.3.a.11 literef-split-cite]]
+      - [[#user-content-func-literef-split-cite-raw][7.3.a.12 literef-split-cite-raw]]
+      - [[#user-content-func-literef-split-cite-title-author][7.3.a.13 literef-split-cite-title-author]]
+    - [[#user-content-vars-module-literef-citation-link][7.3.b Variables]]
+  - [[#user-content-module-literef-config][7.4 Module literef-config.el]] -- values of configuration variables and key shortcuts for frequently used commands.
+    - [[#user-content-funcs-module-literef-config][7.4.a Functions]]
+    - [[#user-content-vars-module-literef-config][7.4.b Variables]]
+      - [[#user-content-var-literef-arc-filter-variables-prefix][7.4.b.1 literef-arc-filter-variables-prefix]]
+      - [[#user-content-var-literef-bibliography-package][7.4.b.2 literef-bibliography-package]]
+      - [[#user-content-var-literef-bibliography-style][7.4.b.3 literef-bibliography-style]]
+      - [[#user-content-var-literef-citation-function-color][7.4.b.4 literef-citation-function-color]]
+      - [[#user-content-var-literef-citation-function-link][7.4.b.5 literef-citation-function-link]]
+      - [[#user-content-var-literef-citation-functions][7.4.b.6 literef-citation-functions]]
+      - [[#user-content-var-literef-citation-link-sorting-criteria][7.4.b.7 literef-citation-link-sorting-criteria]]
+      - [[#user-content-var-literef-default-image-html-attrs][7.4.b.8 literef-default-image-html-attrs]]
+      - [[#user-content-var-literef-default-image-latex-attrs][7.4.b.9 literef-default-image-latex-attrs]]
+      - [[#user-content-var-literef-drop-directory][7.4.b.10 literef-drop-directory]]
+      - [[#user-content-var-literef-equal-timestamps][7.4.b.11 literef-equal-timestamps]]
+      - [[#user-content-var-literef-graph-font-height][7.4.b.12 literef-graph-font-height]]
+      - [[#user-content-var-literef-papers-directory][7.4.b.13 literef-papers-directory]]
+      - [[#user-content-var-literef-pdf-annotation-color][7.4.b.14 literef-pdf-annotation-color]]
+      - [[#user-content-var-literef-pdf-annotation-link][7.4.b.15 literef-pdf-annotation-link]]
+      - [[#user-content-var-literef-sort-citation-links][7.4.b.16 literef-sort-citation-links]]
+      - [[#user-content-var-literef-subgraph-show-buffer][7.4.b.17 literef-subgraph-show-buffer]]
+      - [[#user-content-var-literef-subgraph-show-only-generating-arcs][7.4.b.18 literef-subgraph-show-only-generating-arcs]]
+      - [[#user-content-var-literef-survey-directory][7.4.b.19 literef-survey-directory]]
+  - [[#user-content-module-literef-export][7.5 Module literef-export.el]] -- functions for handling exporting a survey.
+    - [[#user-content-funcs-module-literef-export][7.5.a Functions]]
+      - [[#user-content-func-literef-export-file-name-without-ext][7.5.a.1 literef-export-file-name-without-ext]]
+      - [[#user-content-func-literef-export-to-file][7.5.a.2 literef-export-to-file]]
+      - [[#user-content-func-literef-insert-note-references][7.5.a.3 literef-insert-note-references]]
+      - [[#user-content-func-literef-insert-subgraph-image-file-link][7.5.a.4 literef-insert-subgraph-image-file-link]]
+      - [[#user-content-func-literef-key-notes-p][7.5.a.5 literef-key-notes-p]]
+      - [[#user-content-func-literef-keys-to-insert][7.5.a.6 literef-keys-to-insert]]
+      - [[#user-content-func-literef-make-bib-file][7.5.a.7 literef-make-bib-file]]
+      - [[#user-content-func-literef-reference-text][7.5.a.8 literef-reference-text]]
+      - [[#user-content-func-literef-remove-citation-functions][7.5.a.9 literef-remove-citation-functions]]
+      - [[#user-content-func-literef-source-buffer-string][7.5.a.10 literef-source-buffer-string]]
+      - [[#user-content-func-literef-subgraph-export-dispatch][7.5.a.11 literef-subgraph-export-dispatch]]
+      - [[#user-content-func-literef-subgraph-image-file-link][7.5.a.12 literef-subgraph-image-file-link]]
+      - [[#user-content-func-literef-subgraph-image-file-name][7.5.a.13 literef-subgraph-image-file-name]]
+    - [[#user-content-vars-module-literef-export][7.5.b Variables]]
+      - [[#user-content-var-literef-no-section-reference][7.5.b.1 literef-no-section-reference]]
+  - [[#user-content-module-literef-graph][7.6 Module literef-graph.el]] -- functions for building and updating the citation graph.
+    - [[#user-content-funcs-module-literef-graph][7.6.a Functions]]
+      - [[#user-content-func-literef-add-citation-and-functions-to-hash][7.6.a.1 literef-add-citation-and-functions-to-hash]]
+      - [[#user-content-func-literef-compute-graph][7.6.a.2 literef-compute-graph]]
+      - [[#user-content-func-literef-graph-add-arc][7.6.a.3 literef-graph-add-arc]]
+      - [[#user-content-func-literef-graph-add-key][7.6.a.4 literef-graph-add-key]]
+      - [[#user-content-func-literef-graph-arc-label][7.6.a.5 literef-graph-arc-label]]
+      - [[#user-content-func-literef-graph-key-entry][7.6.a.6 literef-graph-key-entry]]
+      - [[#user-content-func-literef-graph-update-key][7.6.a.7 literef-graph-update-key]]
+      - [[#user-content-func-literef-init-graph][7.6.a.8 literef-init-graph]]
+      - [[#user-content-func-literef-key-in-neighbors][7.6.a.9 literef-key-in-neighbors]]
+      - [[#user-content-func-literef-key-out-citations][7.6.a.10 literef-key-out-citations]]
+      - [[#user-content-func-literef-key-out-neighbors][7.6.a.11 literef-key-out-neighbors]]
+      - [[#user-content-func-literef-out-citations][7.6.a.12 literef-out-citations]]
+      - [[#user-content-func-literef-save-hook][7.6.a.13 literef-save-hook]]
+    - [[#user-content-vars-module-literef-graph][7.6.b Variables]]
+      - [[#user-content-var-literef-graph][7.6.b.1 literef-graph]]
+  - [[#user-content-module-literef-helm][7.7 Module literef-helm.el]] -- the =helm= interface for searching in the papers database.
+    - [[#user-content-funcs-module-literef-helm][7.7.a Functions]]
+      - [[#user-content-func-literef-action-transformer][7.7.a.1 literef-action-transformer]]
+      - [[#user-content-func-literef-assoc][7.7.a.2 literef-assoc]]
+      - [[#user-content-func-literef-author-down][7.7.a.3 literef-author-down]]
+      - [[#user-content-func-literef-author-up][7.7.a.4 literef-author-up]]
+      - [[#user-content-func-literef-candidate-helm-string][7.7.a.5 literef-candidate-helm-string]]
+      - [[#user-content-func-literef-candidate-property][7.7.a.6 literef-candidate-property]]
+      - [[#user-content-func-literef-candidate-transformer][7.7.a.7 literef-candidate-transformer]]
+      - [[#user-content-func-literef-candidate-venue][7.7.a.8 literef-candidate-venue]]
+      - [[#user-content-func-literef-candidate-venue-type][7.7.a.9 literef-candidate-venue-type]]
+      - [[#user-content-func-literef-char-to-compare][7.7.a.10 literef-char-to-compare]]
+      - [[#user-content-func-literef-compare][7.7.a.11 literef-compare]]
+      - [[#user-content-func-literef-criteria-list][7.7.a.12 literef-criteria-list]]
+      - [[#user-content-func-literef-filtered-candidate-transformer][7.7.a.13 literef-filtered-candidate-transformer]]
+      - [[#user-content-func-literef-helm-insert-action][7.7.a.14 literef-helm-insert-action]]
+      - [[#user-content-func-literef-helm-marked-keys][7.7.a.15 literef-helm-marked-keys]]
+      - [[#user-content-func-literef-key-down][7.7.a.16 literef-key-down]]
+      - [[#user-content-func-literef-key-up][7.7.a.17 literef-key-up]]
+      - [[#user-content-func-literef-kill-ring-action-yank][7.7.a.18 literef-kill-ring-action-yank]]
+      - [[#user-content-func-literef-read-sorting-criteria][7.7.a.19 literef-read-sorting-criteria]]
+      - [[#user-content-func-literef-sort][7.7.a.20 literef-sort]]
+      - [[#user-content-func-literef-str-compare][7.7.a.21 literef-str-compare]]
+      - [[#user-content-func-literef-subgraph-helm][7.7.a.22 literef-subgraph-helm]]
+      - [[#user-content-func-literef-timestamp-compare][7.7.a.23 literef-timestamp-compare]]
+      - [[#user-content-func-literef-timestamp-down][7.7.a.24 literef-timestamp-down]]
+      - [[#user-content-func-literef-timestamp-up][7.7.a.25 literef-timestamp-up]]
+      - [[#user-content-func-literef-title-down][7.7.a.26 literef-title-down]]
+      - [[#user-content-func-literef-title-up][7.7.a.27 literef-title-up]]
+      - [[#user-content-func-literef-type-down][7.7.a.28 literef-type-down]]
+      - [[#user-content-func-literef-type-up][7.7.a.29 literef-type-up]]
+      - [[#user-content-func-literef-venue-down][7.7.a.30 literef-venue-down]]
+      - [[#user-content-func-literef-venue-up][7.7.a.31 literef-venue-up]]
+      - [[#user-content-func-literef-year-down][7.7.a.32 literef-year-down]]
+      - [[#user-content-func-literef-year-up][7.7.a.33 literef-year-up]]
+    - [[#user-content-vars-module-literef-helm][7.7.b Variables]]
+      - [[#user-content-var-literef-criteria][7.7.b.1 literef-criteria]]
+  - [[#user-content-module-literef-latex-map][7.8 Module literef-latex-map.el]] -- handling accented characters.
+    - [[#user-content-funcs-module-literef-latex-map][7.8.a Functions]]
+      - [[#user-content-func-literef-bibtex-completion-get-value][7.8.a.1 literef-bibtex-completion-get-value]]
+      - [[#user-content-func-literef-translate-latex][7.8.a.2 literef-translate-latex]]
+    - [[#user-content-vars-module-literef-latex-map][7.8.b Variables]]
+      - [[#user-content-var-literef-latex-full-map][7.8.b.1 literef-latex-full-map]]
+      - [[#user-content-var-literef-latex-map][7.8.b.2 literef-latex-map]]
+      - [[#user-content-var-literef-latex-small-map][7.8.b.3 literef-latex-small-map]]
+  - [[#user-content-module-literef-pdf][7.9 Module literef-pdf.el]] -- PDF annotation links, import of papers referenced in a PDF, searching in the paper PDFs.
+    - [[#user-content-funcs-module-literef-pdf][7.9.a Functions]]
+      - [[#user-content-func-literef-buffers-in-mode][7.9.a.1 literef-buffers-in-mode]]
+      - [[#user-content-func-literef-cite-pdf-annotation][7.9.a.2 literef-cite-pdf-annotation]]
+      - [[#user-content-func-literef-first-word][7.9.a.3 literef-first-word]]
+      - [[#user-content-func-literef-follow-pdf-annotation-link][7.9.a.4 literef-follow-pdf-annotation-link]]
+      - [[#user-content-func-literef-get-region-bibtex][7.9.a.5 literef-get-region-bibtex]]
+      - [[#user-content-func-literef-glue-p][7.9.a.6 literef-glue-p]]
+      - [[#user-content-func-literef-last-word-hyphen][7.9.a.7 literef-last-word-hyphen]]
+      - [[#user-content-func-literef-pdf-annotation-string][7.9.a.8 literef-pdf-annotation-string]]
+      - [[#user-content-func-literef-pdf-buffer-keys][7.9.a.9 literef-pdf-buffer-keys]]
+      - [[#user-content-func-literef-search-pdfs][7.9.a.10 literef-search-pdfs]]
+      - [[#user-content-func-literef-single-line-query][7.9.a.11 literef-single-line-query]]
+    - [[#user-content-vars-module-literef-pdf][7.9.b Variables]]
+  - [[#user-content-module-literef-server][7.10 Module literef-server.el]] -- communication with the Python server.
+    - [[#user-content-funcs-module-literef-server][7.10.a Functions]]
+      - [[#user-content-func-literef-request-filename][7.10.a.1 literef-request-filename]]
+      - [[#user-content-func-literef-server-request][7.10.a.2 literef-server-request]]
+    - [[#user-content-vars-module-literef-server][7.10.b Variables]]
+  - [[#user-content-module-literef-subgraph][7.11 Module literef-subgraph.el]] -- building a citation subgraph and working with it.
+    - [[#user-content-funcs-module-literef-subgraph][7.11.a Functions]]
+      - [[#user-content-func-literef-add-to-next-iter][7.11.a.1 literef-add-to-next-iter]]
+      - [[#user-content-func-literef-append-spaces][7.11.a.2 literef-append-spaces]]
+      - [[#user-content-func-literef-arc-filter-company-backend][7.11.a.3 literef-arc-filter-company-backend]]
+      - [[#user-content-func-literef-arc-filter-minibuffer-mode][7.11.a.4 literef-arc-filter-minibuffer-mode]]
+      - [[#user-content-func-literef-arc-filter-p][7.11.a.5 literef-arc-filter-p]]
+      - [[#user-content-func-literef-arc-filter-temp-variable][7.11.a.6 literef-arc-filter-temp-variable]]
+      - [[#user-content-func-literef-arc-filter-variables][7.11.a.7 literef-arc-filter-variables]]
+      - [[#user-content-func-literef-generating-arc-p][7.11.a.8 literef-generating-arc-p]]
+      - [[#user-content-func-literef-graph-check-arc][7.11.a.9 literef-graph-check-arc]]
+      - [[#user-content-func-literef-graph-mode][7.11.a.10 literef-graph-mode]]
+      - [[#user-content-func-literef-graph-scroll-down][7.11.a.11 literef-graph-scroll-down]]
+      - [[#user-content-func-literef-graph-scroll-left][7.11.a.12 literef-graph-scroll-left]]
+      - [[#user-content-func-literef-graph-scroll-right][7.11.a.13 literef-graph-scroll-right]]
+      - [[#user-content-func-literef-graph-scroll-up][7.11.a.14 literef-graph-scroll-up]]
+      - [[#user-content-func-literef-init-subgraph][7.11.a.15 literef-init-subgraph]]
+      - [[#user-content-func-literef-key-in-subgraph-p][7.11.a.16 literef-key-in-subgraph-p]]
+      - [[#user-content-func-literef-list-satisfies-predicate-p][7.11.a.17 literef-list-satisfies-predicate-p]]
+      - [[#user-content-func-literef-longest-line-length][7.11.a.18 literef-longest-line-length]]
+      - [[#user-content-func-literef-make-arc-filter][7.11.a.19 literef-make-arc-filter]]
+      - [[#user-content-func-literef-neighbor-pairs][7.11.a.20 literef-neighbor-pairs]]
+      - [[#user-content-func-literef-read-arc-filter][7.11.a.21 literef-read-arc-filter]]
+      - [[#user-content-func-literef-select-subgraph][7.11.a.22 literef-select-subgraph]]
+      - [[#user-content-func-literef-select-subgraph-for-export][7.11.a.23 literef-select-subgraph-for-export]]
+      - [[#user-content-func-literef-selected-subgraph-string][7.11.a.24 literef-selected-subgraph-string]]
+      - [[#user-content-func-literef-show-selected-subgraph][7.11.a.25 literef-show-selected-subgraph]]
+      - [[#user-content-func-literef-show-selected-subgraph-png][7.11.a.26 literef-show-selected-subgraph-png]]
+      - [[#user-content-func-literef-show-selected-subgraph-raw][7.11.a.27 literef-show-selected-subgraph-raw]]
+      - [[#user-content-func-literef-subgraph-add-generating-arc][7.11.a.28 literef-subgraph-add-generating-arc]]
+      - [[#user-content-func-literef-subgraph-add-key][7.11.a.29 literef-subgraph-add-key]]
+      - [[#user-content-func-literef-subgraph-build-from-source][7.11.a.30 literef-subgraph-build-from-source]]
+      - [[#user-content-func-literef-subgraph-compute-initial-keys][7.11.a.31 literef-subgraph-compute-initial-keys]]
+      - [[#user-content-func-literef-subgraph-generating-arcs][7.11.a.32 literef-subgraph-generating-arcs]]
+      - [[#user-content-func-literef-subgraph-initial-keys][7.11.a.33 literef-subgraph-initial-keys]]
+      - [[#user-content-func-literef-subgraph-keys][7.11.a.34 literef-subgraph-keys]]
+      - [[#user-content-func-literef-subgraph-reset-selection][7.11.a.35 literef-subgraph-reset-selection]]
+      - [[#user-content-func-literef-subgraph-save-image][7.11.a.36 literef-subgraph-save-image]]
+      - [[#user-content-func-literef-subgraph-select-source][7.11.a.37 literef-subgraph-select-source]]
+      - [[#user-content-func-literef-subgraph-set-initial-keys][7.11.a.38 literef-subgraph-set-initial-keys]]
+      - [[#user-content-func-literef-subgraph-set-source-property][7.11.a.39 literef-subgraph-set-source-property]]
+      - [[#user-content-func-literef-subgraph-source][7.11.a.40 literef-subgraph-source]]
+      - [[#user-content-func-literef-subgraph-source-property][7.11.a.41 literef-subgraph-source-property]]
+      - [[#user-content-func-literef-uniform-cost-search][7.11.a.42 literef-uniform-cost-search]]
+    - [[#user-content-vars-module-literef-subgraph][7.11.b Variables]]
+      - [[#user-content-var-literef-graph-mode][7.11.b.1 literef-graph-mode]]
+      - [[#user-content-var-literef-graph-mode-hook][7.11.b.2 literef-graph-mode-hook]]
+      - [[#user-content-var-literef-graph-mode-map][7.11.b.3 literef-graph-mode-map]]
+      - [[#user-content-var-literef-subgraph][7.11.b.4 literef-subgraph]]
+  - [[#user-content-module-literef-util-links][7.12 Module literef-util-links.el]] -- utility functions for working with links.
+    - [[#user-content-funcs-module-literef-util-links][7.12.a Functions]]
+      - [[#user-content-func-literef-all-links][7.12.a.1 literef-all-links]]
+      - [[#user-content-func-literef-citation-function-link-p][7.12.a.2 literef-citation-function-link-p]]
+      - [[#user-content-func-literef-citation-function-links][7.12.a.3 literef-citation-function-links]]
+      - [[#user-content-func-literef-citation-link-p][7.12.a.4 literef-citation-link-p]]
+      - [[#user-content-func-literef-citation-link-under-cursor][7.12.a.5 literef-citation-link-under-cursor]]
+      - [[#user-content-func-literef-citation-links][7.12.a.6 literef-citation-links]]
+      - [[#user-content-func-literef-first-citation-link-on-line][7.12.a.7 literef-first-citation-link-on-line]]
+      - [[#user-content-func-literef-link-begin][7.12.a.8 literef-link-begin]]
+      - [[#user-content-func-literef-link-end][7.12.a.9 literef-link-end]]
+      - [[#user-content-func-literef-link-path][7.12.a.10 literef-link-path]]
+      - [[#user-content-func-literef-link-path-components][7.12.a.11 literef-link-path-components]]
+      - [[#user-content-func-literef-link-prev-element][7.12.a.12 literef-link-prev-element]]
+      - [[#user-content-func-literef-link-prev-non-space][7.12.a.13 literef-link-prev-non-space]]
+      - [[#user-content-func-literef-link-type][7.12.a.14 literef-link-type]]
+      - [[#user-content-func-literef-link-less][7.12.a.15 literef-link<]]
+    - [[#user-content-vars-module-literef-util-links][7.12.b Variables]]
+  - [[#user-content-module-literef-utils][7.13 Module literef-utils.el]] -- general-purpose utilities used by the other modules.
+    - [[#user-content-funcs-module-literef-utils][7.13.a Functions]]
+      - [[#user-content-func-literef-all-keys][7.13.a.1 literef-all-keys]]
+      - [[#user-content-func-literef-bib-filename][7.13.a.2 literef-bib-filename]]
+      - [[#user-content-func-literef-bib-files][7.13.a.3 literef-bib-files]]
+      - [[#user-content-func-literef-buffer-key][7.13.a.4 literef-buffer-key]]
+      - [[#user-content-func-literef-buffer-keys][7.13.a.5 literef-buffer-keys]]
+      - [[#user-content-func-literef-check-arrived-pdfs][7.13.a.6 literef-check-arrived-pdfs]]
+      - [[#user-content-func-literef-creation-timestamp][7.13.a.7 literef-creation-timestamp]]
+      - [[#user-content-func-literef-current-buffer-key][7.13.a.8 literef-current-buffer-key]]
+      - [[#user-content-func-literef-current-key][7.13.a.9 literef-current-key]]
+      - [[#user-content-func-literef-eval-string][7.13.a.10 literef-eval-string]]
+      - [[#user-content-func-literef-file-key][7.13.a.11 literef-file-key]]
+      - [[#user-content-func-literef-filename][7.13.a.12 literef-filename]]
+      - [[#user-content-func-literef-find-file-other-window][7.13.a.13 literef-find-file-other-window]]
+      - [[#user-content-func-literef-folder-key][7.13.a.14 literef-folder-key]]
+      - [[#user-content-func-literef-get-bibtex-key-under-cursor][7.13.a.15 literef-get-bibtex-key-under-cursor]]
+      - [[#user-content-func-literef-get-entry][7.13.a.16 literef-get-entry]]
+      - [[#user-content-func-literef-hash-empty-p][7.13.a.17 literef-hash-empty-p]]
+      - [[#user-content-func-literef-hash-keys-minus][7.13.a.18 literef-hash-keys-minus]]
+      - [[#user-content-func-literef-hash-keys-to-list][7.13.a.19 literef-hash-keys-to-list]]
+      - [[#user-content-func-literef-hash-pairs-to-list][7.13.a.20 literef-hash-pairs-to-list]]
+      - [[#user-content-func-literef-join-strings][7.13.a.21 literef-join-strings]]
+      - [[#user-content-func-literef-key-exists][7.13.a.22 literef-key-exists]]
+      - [[#user-content-func-literef-notes-filename][7.13.a.23 literef-notes-filename]]
+      - [[#user-content-func-literef-number-or-nil][7.13.a.24 literef-number-or-nil]]
+      - [[#user-content-func-literef-number-or-nil-p][7.13.a.25 literef-number-or-nil-p]]
+      - [[#user-content-func-literef-open-bibfile][7.13.a.26 literef-open-bibfile]]
+      - [[#user-content-func-literef-open-key-bibfile][7.13.a.27 literef-open-key-bibfile]]
+      - [[#user-content-func-literef-open-key-notes][7.13.a.28 literef-open-key-notes]]
+      - [[#user-content-func-literef-open-key-pdf][7.13.a.29 literef-open-key-pdf]]
+      - [[#user-content-func-literef-open-key-pdf-raw][7.13.a.30 literef-open-key-pdf-raw]]
+      - [[#user-content-func-literef-open-notes][7.13.a.31 literef-open-notes]]
+      - [[#user-content-func-literef-open-pdf][7.13.a.32 literef-open-pdf]]
+      - [[#user-content-func-literef-pdf-filename][7.13.a.33 literef-pdf-filename]]
+      - [[#user-content-func-literef-plist-put][7.13.a.34 literef-plist-put]]
+      - [[#user-content-func-literef-raw-str-compare][7.13.a.35 literef-raw-str-compare]]
+      - [[#user-content-func-literef-read-char][7.13.a.36 literef-read-char]]
+      - [[#user-content-func-literef-read-number-or-nil][7.13.a.37 literef-read-number-or-nil]]
+      - [[#user-content-func-literef-replace-in-string-whole-words][7.13.a.38 literef-replace-in-string-whole-words]]
+      - [[#user-content-func-literef-set-default-bibliography][7.13.a.39 literef-set-default-bibliography]]
+      - [[#user-content-func-literef-string-or-nil-to-string][7.13.a.40 literef-string-or-nil-to-string]]
+      - [[#user-content-func-literef-word-correct-p][7.13.a.41 literef-word-correct-p]]
+      - [[#user-content-func-literef-xor][7.13.a.42 literef-xor]]
+      - [[#user-content-func-replace-in-string][7.13.a.43 replace-in-string]]
+      - [[#user-content-func-with-cloned-buffer][7.13.a.44 with-cloned-buffer]]
+    - [[#user-content-vars-module-literef-utils][7.13.b Variables]]
+      - [[#user-content-var-literef-needed-pdfs][7.13.b.1 literef-needed-pdfs]]
+    + [[http://homedir.jct.ac.il/~mgoldenb/literef_server/index.html][7.14 The server]]
+
+@@html:<a name="intro">@@
+* 1 Introduction
+:PROPERTIES:
+:CUSTOM_ID: user-content-intro
+:END:
+Managing knowledge of related literature is an important activity for both graduate students and researchers. A central piece of this activity is maintaining notes both about individual research papers and, more importantly, about whole branches of research. Notes that cover branches of research are extremely useful. These notes are tools for uncovering connections between papers and discovering venues for new research. The purpose of =LiteRef= is to provide a thin layer of software that would make it natural and easy to collect papers, maintain notes about both individual papers and branches of research, explore connections between papers and export all or part of this body of knowledge into a coherent document.@@html:</p>@@
+
+There are many software packages for reference management out there. The main difference between =LiteRef= and these packages is the focus. While the focus of existing reference management software is on maintaining the database of bibliography entries, the focus of =LiteRef= is on providing the researcher with tools that would aid him in growing his /understanding/ of the research field. Consequently, =LiteRef= is centered around the /notes/ written by the researcher.
+
+=LiteRef= runs under [[https://www.gnu.org/software/emacs/][Emacs]], an extremely powerful and flexible text editor. In particular, =Emacs= comes with an awesome major mode for organizing notes called [[http://orgmode.org/][org-mode]]. =LiteRef= harnesses the power of =org-mode= and several other packages (most notably [[https://github.com/jkitchin/org-ref][org-ref]]) to put at the researcher’s disposal a potent tool for maintaining his knowledge of related literature. 
+
+=LiteRef= offers:
+- A variety of means for [[#user-content-import-bib][importing BibTeX entries]] into the database and [[#user-content-actions][performing actions on these entries]]. In particular, BibTeX entries can be fetched from an extensible set of online resources. Also, one can import entries for all the papers in a given journal volume or conference proceedings. This feature supports maintaining an edge in the knowledge of the papers in the narrow specialization of the researcher. The researcher can conveniently [[#user-content-split][track his progress]] on studying the imported papers.
+- Powerful tools for [[#user-content-search][citing papers]] and for [[#user-content-copy-paste][intelligently handling citations]] in =org-mode= notes maintained by the researcher.
+- Automated [[#user-content-import-pdf][fetching of paper PDFs]] from an extensible set of online resources.
+- Specialized =org-mode= links enabling [[#user-content-working-pdf][references to a particular annotation in a paper PDF]] from a notes file. The annotations themselves are handled by the awesome [[https://github.com/politza/pdf-tools][pdf-tools]] package for =Emacs=.
+- Automated generation of bibliography for [[#user-content-basic-export][export]] and powerful synergies with the standard =org-mode= tools such as narrowing to sub-trees and inclusion directives. 
+- [[#user-content-cf][Annotation of citations]] by their role. This seemingly trivial feature gives raise to some of the most powerful features of =LiteRef=. In particular, the annotated citations in the notes associated with the research papers induce a [[#user-content-graph-notion][citation graph]], whereby related papers are connected by arcs labeled by citation functions.
+- A general way of defining a [[#user-content-subgraph-build][citation subgraph]], which is a subgraph of the citation graph possibly augmented with papers cited in an arbitrary buffer.
+- The ability to obtain much insight by [[#user-content-subgraph-vis][visualizing the citation subgraph]].
+- The [[#user-content-subgraph-operations][ability to restrict]] the action of several commonly used activities such as [[#user-content-search][searching for papers]] to the citation subgraph.
+- [[#user-content-subgraph-export][Advanced export]] that integrates all the notes relevant to the citation subgraph into a coherent document. Thus, one can quickly obtain a well-formed survey of a branch of his research area. 
+
+The following sections describe both the overall design of =LiteRef= and its features. Each feature’s description is accompanied by a short video demonstrating the feature’s usage. 
+  
+@@html:<a name="design">@@
+* 2 The overall design
+:PROPERTIES:
+:CUSTOM_ID: user-content-design
+:END:
+The purpose of this section is to describe the conceptual design of =LiteRef= and thereby make reading the sections that describe particular features comfortable.
+
+@@html:<a name="phys">@@ 
+** 2.1 Physical structure
+:PROPERTIES:
+:CUSTOM_ID: user-content-phys
+:END:
+As far as the user is concerned, two folders in the distribution are of interest: =papers/= and =drop/=. As suggested by their names, the =papers/= folder contains the database of papers, while the =drop/= folder is the place where new BibTeX and PDF entries are to be deposited for subsequent handling by =LiteRef=.@@html:</p>@@
+
+The database of papers has a very simple structure, whereby each paper gets a folder whose name is the key of that paper’s BibTeX entry (=LiteRef= generates these keys automatically). A paper’s folder contains at least two files: /paper.bib/ (the BibTeX entry of the paper) and /paper.org/ (the researcher’s notes about the paper). In addition, it may contain /paper.pdf/ (the PDF of the paper) and any other files that the researcher wishes to associate with the paper.
+
+=LiteRef= does not impose any restrictions on the format of the notes. Thus, all the arsenal of =org-mode= is put at the researcher’s disposal. In addition, the researcher can maintain any number of survey notes, which can reside anywhere in the file system. Such notes are usually dedicated to branches of research rather than to a particular paper.
+
+@@html:<a name="import">@@  
+** 2.2 Import of entries
+:PROPERTIES:
+:CUSTOM_ID: user-content-import
+:END:
+[[#user-content-import-bib][Insertion of a new BibTeX entry]] into the =LiteRef= database is triggered by the appearance of a /.bib/ file in the =drop/= folder and handled by the /server/ written in =Python=. This can happen in a large number of ways from manual creation of this file to automated search in online sources. Whatever way is chosen, each BibTeX entry in the new /.bib/ file receives an automatically generated key. This key consists of three parts:
+- The last name of the first author followed by a capital first letter of each co-author’s last name,
+- Year of publication followed by a letter signifying the type of venue, e.g. 2000c (a conference proceedings in 2000) or 2005j (a journal volume in 2005).
+- Two (possibly abbreviated) words from the title. 
+After duplicate detection, the new entries are entered into the database. Both /paper.bib/ and (an empty) /paper.org/ for each of the new entries are created at this point.
+ 
+[[#user-content-import-pdf][Searching for a PDF file]] is triggered by trying to open a paper’s PDF file in any one of the ways described [[#user-content-actions][below]] and is handled by the server as well. When this happens, if the =drop/= folder contains PDF files, these become the first candidates. If the user rejects these candidates, automated search in the online sources ensues.
+
+The online sources for searching for BibTeX and PDF files are defined in an extensible way in the [[https://github.com/mgoldenbe/LiteRef/blob/master/el/py/online_sources.py][online_sources.py]] module of the server. This module documents in detail how one can extend the set of online sources with sources of his own. If such an extension takes place, it is up to the user to respect the terms of service of whatever sites are searched. The author of =LiteRef= does not assume any responsibility for violations.
+
+@@html:<a name="ui">@@
+** 2.3 The user interface
+:PROPERTIES:
+:CUSTOM_ID: user-content-ui
+:END:
+Most features of =LiteRef= are implemented in Emacs Lisp. These features use uniquely =Emacs= ways for doing things. These ways may come as a surprise to an uninitiated user, but inevitably prove to be extremely time-effective. Once having got used to using =Emacs= properly, one rejoices for the rest of his life at having found the ultimate tool for everything related to editing text, maintaining notes and too many other tasks to list. =LiteRef= adds maintaining knowledge of related literature to these tasks.@@html:</p>@@
+
+The functionalities related to watching the =drop/= folder and creating/fetching new entries are delegated to the /server/. In contrast to actions executed entirely inside =Emacs=, the server relies on dialog windows for its features’ user interface. One positive effect of this difference is that the user can visually and easily distinguish a /candidate/ BibTeX entry or PDF that has just been found and downloaded automatically from an entry that is already in the =LiteRef= database. Thus, the overall user experience only wins from this non-uniformness of presentation means.
+
+@@html:<a name="cite">@@
+** 2.4 Paper citations
+:PROPERTIES:
+:CUSTOM_ID: user-content-cite
+:END:
+The features that distinguish =LiteRef= are centered around working with paper citations. A paper is cited using the =org-ref= citation link, which consists of =cite:= (or its [[https://github.com/jkitchin/org-ref/blob/master/org-ref.org#user-content-citations][derivatives]], such as =citea:= etc.) followed by the keys of the BibTeX entries of the papers being cited, e.g. =cite:AbrahamDGW2011c-Hub-Based,ChakrabortiSSKK2016c-Compl-Condit=. In most cases, one would cite a paper by searching for it using =helm=, which is the =Emacs= way of searching in a large collection of candidates by gradually narrowing the candidate set. The candidates for this search can be either [[#user-content-search][the whole paper database]] or the papers that form the current [[#user-content-subgraph-search][citation subgraph]]. Once some paper citations are added, [[#user-content-working-cite][a number of features]] of =LiteRef= dedicated to making the editing tasks related to paper citations effective are available.@@html:</p>@@
+
+Besides the paper citations, two other types of links are at the user’s disposal. First, a paper citation can be followed by a list of [[#user-content-cf][citation functions]], e.g. =cite:AlfeldZB2016c-Machin-Teach= =f:develops,compares=. Citation functions allow the researcher to characterize the relationships between the two papers. For example, suppose the notes for the paper /X/ cite the paper /Y/. This citation could signify that /X/ develops the ideas of /Y/, that the ideas presented in /X/ bear a degree of resemblance to those of /Y/, that /X/ compares its results to those of /Y/ etc. =LiteRef= leaves it to the researcher to define the list of legal citation functions. One can either come up with his own list or use an existing set of citation functions such as [[http://www.sparontologies.net/ontologies/cito/source.html][the Citation Typing Ontology]]. Once such a list is defined, =LiteRef= makes inserting citation function links convenient. As mentioned earlier, citation function links are utilized by =LiteRef= to provide [[#user-content-subgraph-operations][functionalities related to the citation (sub-)graph]].
+
+Second, a paper’s notes can contain [[#user-content-working-pdf][links to particular annotations in the paper’s PDF]]. This feature allows the researcher to easily relate his comments to particular clauses in the paper.
+
+@@html:<a name="features">@@
+* 3 Features
+:PROPERTIES:
+:CUSTOM_ID: user-content-features
+:END:
+This section describes the features of =LiteRef= in detail.
+
+@@html:<a name="import-bib">@@
+** 3.1 Importing BibTeX entries
+:PROPERTIES:
+:CUSTOM_ID: user-content-import-bib
+:END:
+There are several ways to import a new BibTeX entry into the database of =LiteRef=.
+
+@@html:<a name="import-bib-drop">@@
+*** 3.1.1 By putting a /.bib/ file into the =drop/= folder.
+:PROPERTIES:
+:CUSTOM_ID: user-content-import-bib-drop
+:END:
+The most direct way to import BibTeX entries into the database of =LiteRef= is to either download or copy the corresponding /.bib/ file into the =drop/= folder. Should you like to write the new BibTeX entries from scratch, the /.bib/ file can be either created directly in the =drop/= folder or in another location and then copied over.
+The following actions are performed automatically as soon as a new /.bib/ file appears in the =drop/= folder:
+- The BibTeX entries are extracted.
+- The key for each BibTeX entry is generated.
+- All the BibTeX entries are added into the database subject to duplicate detection. In case a duplicate is detected, the user may choose to keep both entries, in which case the key of the new entry is modified to guarantee uniqueness. One practical case when a need for this feature may arise is when the new entry refers to an extended abstract of the full-size conference paper that is already present in the database.
+  + Note that all the added entries get the same creation time stamp. This makes a difference when ordering papers by multiple criteria as described [[#user-content-search][below]]. 
+- The list of newly added keys is put into the clipboard, so the papers can be immediately cited in the notes by invoking the =yank= command (/yanking/ is the =Emacs= term for pasting), which is typically bound to =C-y=.
+# This process is shown in the following [[https://www.dropbox.com/s/yi06fltwsvs21kw/import_by_copy.mp4?dl=0][demo]].
+
+# **** Scenario
+# So, suppose we have a BibTeX file somewhere on our system. Here it is. For this example, I made a file with three BibTeX entries, the last two of which refer to papers that are actually already contained in the LiteRef database (though they have a different key in my old file). Let us now see what happens when we copy this file into the drop folder.
+
+# We get a message about the second entry being a duplicate. Let’s choose to include this entry anyways. However, we do not wish to apply this choice to the remaining entries of the file. Now we get a message about the third entry being a duplicate. Let’s discard that entry. Note that we did not get any message about the first entry. That entry will be silently added to the database. Now, let’s switch to an Emacs session with an org-buffer open. I invoke the yank command and the newly added papers are cited! Note the automatically generated keys and, in particular, the suffix added to the key of the second paper.
+
+# Running a little bit ahead, let’s run a paper search and sort the candidates in the decreasing order of the creation time stamp. The top two candidates are the two papers that we have just added. Note that their creation time stamp is same, so that we can order them on an additional criteria. So, let’s order them by the type of venue.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/yi06fltwsvs21kw/import_by_copy.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/mhttxvskgudql8h/import_by_copy.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="import-bib-clipboard">@@
+*** 3.1.2 By copying a BibTeX entry into the clipboard
+:PROPERTIES:
+:CUSTOM_ID: user-content-import-bib-clipboard
+:END:
+With some sites, it is easier to put a BibTeX entry into the clipboard than to download/create a /.bib/ file. The =literef-bibtex-from-clipboard= command (bound by default to =C-c c=) caters to this case.@@html:</p>@@
+
+# **** Scenario
+# Suppose we found a paper on Semantic Scholar. Now we open its BibTeX entry and copy it into the clipboard. Let’s now switch to our notes and invoke the =literef-bibtex-from-clipboard= command. The entry is now in the database and we can cite it by invoking the yank command.
+# Had we found the same paper on DBLP, we might have as well chosen to import it by downloading the BibTeX file into the drop/ folder. … But now, of course, this entry is a duplicate.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/i30oguvqcmk5lkg/import_by_download.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/m8rrpxehodwri81/import_by_download.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="import-search-online">@@
+*** 3.1.3 By searching in online sources
+:PROPERTIES:
+:CUSTOM_ID: user-content-import-search-online
+:END:
+The =literef-get-region-bibtex= command (bound by default to =C-c g=) searches for a BibTeX entry corresponding to the text in the active region. The region can be either in a regular =Emacs= buffer (e.g. in a notes file) or in a PDF buffer. The latter is the most widespread use case, since most often the researcher becomes interested in a paper that is cited in the paper currently being studied. When the selected region consists of multiple lines with words split between the lines, =LiteRef= forms the single-line query intelligently. That is, it uses spell checking to determine whether the hyphen should be kept or removed. It defers to the user’s help only in case of doubt (i.e. when both the hyphenated and the „glued“ versions are spelled (in)correctly).@@html:</p>@@
+# **** Scenario
+# For this demo, we will open an existing PDF of a paper and assume that we got interested in, say, this paper in the bibliography. So, we select this paper and invoke the =literef-get-region-bibtex= command. We see that DBLP, which is the online source selected in my configuration, is searched. The BibTeX is fetched and we are asked to confirm that this is the needed entry. Let’s confirm. We can now cite the newly added paper.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/e4wuod3dplyodfr/import_bib_online.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/61y40ctl8xmj1um/import_bib_online.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+The researcher can configure =LiteRef= to search several online sources. This is done by appropriately setting the =BIB_AUTOMATED_SOURCES= variable in [[https://github.com/mgoldenbe/LiteRef/blob/master/el/py/config.py][config.py]]. In addition, the user can set the =BIB_MANUAL_SOURCE= variable of the server. When this variable is set and the automated search does not come up with the desired BibTeX entry, =LiteRef= will open the browser for searching in the specified source manually.
+
+The currently implemented online sources for BibTeX entries are Google Scholar, Semantic Scholar and DBLP. The user can add more online sources by extending [[https://github.com/mgoldenbe/LiteRef/blob/master/el/py/online_sources.py][online_sources.py]] with classes that implement interfaces documented in that module.
+
+@@html:<a name="import-html">@@
+*** 3.1.4 By downloading an HTML containing a number of papers
+:PROPERTIES:
+:CUSTOM_ID: user-content-import-html
+:END:
+Suppose that there is a venue that publishes papers in the narrow specialization of the researcher. The researcher needs to be knowledgeable about all the papers appearing in that venue. He may even want to dedicate a special notes file, in which papers from this venue will be represented and organized. (We will see [[#user-content-split][below]] that =LiteRef= makes it easy to track his progress on studying these papers as well.)@@html:</p>@@
+
+To cater to the above scenario, =LiteRef= can handle /.html/ files downloaded into the =drop/= folder. =LiteRef= extracts from such an HTML links to BibTeX entries and downloads the entries themselves. Of the implemented online sources, only DBLP is currently supported by this feature. 
+
+# **** Scenario
+# Since the SoCS conference proceedings contain papers in my narrow specialization, I would like to review all the papers from these proceedings. Here, I opened in DBLP the table of contents of SoCS from 2011. I download the HTML of this page and wait for all the BibTeX entries to be fetched… Here we go. Now we can go ahead and cite the newly added papers. 
+
+# Running a little bit ahead, let us make a headline for each paper in preparation for further study… 
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/9hwao8hkh6y8rjv/import_html.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/xxsyd0rre2u77j5/import_html.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="working-cite">@@
+** 3.2 Working with citations
+:PROPERTIES:
+:CUSTOM_ID: user-content-working-cite
+:END:
+Most of the functionalities of =LiteRef= are centered around citations. In this section, we focus on the tasks of finding the keys to cite, editing the text containing citations, splitting a list of citations and working with the currently active citation or paper.@@html:</p>@@ 
+
+All the functionalities presented in this and further sections work with all types of citation links supported by =org-ref= and described by the variable =org-ref-cite-types=. The video demos of this section were recorded before this enhancement and use =cite:= links exclusively. The demo in the [[#user-content-subgraph-export][below section]] on advanced export capabilities of =LiteRef= shows the use of other types of citation links. 
+
+@@html:<a name="search">@@
+*** 3.2.1 Searching the papers database
+:PROPERTIES:
+:CUSTOM_ID: user-content-search
+:END:
+=LiteRef= inherits from =org-ref= and significantly improves the =org-ref-insert-link= command (bound by default to =C-c ]=) for inserting a citation.@@html:</p>@@ 
+
+Just like it’s predecessor, the command uses the =helm= interface for finding candidates by iterative process of filtering. =LiteRef= helps make this process more effective by extending the sorting capabilities to support multiple criteria. Just like in =org-ref=, the sorting is bound by default to =M-<down>= (=M= stands for the /Meta/ key, which is =Alt= on most keyboards). For example, one can access the recently added entries by sorting the candidates on the date and time of creation (which is taken to be the date and time of the last update of /paper.bib/ for that entry; entries added within a small time margin, which is two seconds by default, of each other are considered to be added at the same time to enable sorting papers that were imported together on additional criteria). 
+
+As in =org-ref=, one can select (by pressing =C-<SPACE>=) and cite multiple papers. If the [[https://github.com/mgoldenbe/LiteRef/blob/master/el/literef-config.el][configuration variable]] =literef-sort-citation-links= is not =nil=, the cited papers are sorted on the criteria encoded in the string value of =literef-citation-link-sorting-criteria=.
+
+Note that one can perform actions other than inserting a citation on a candidate (this is done by pressing =<TAB>= while the candidate is active).
+
+# **** Scenario
+# Suppose we would like to find recent papers of prof. Felner. We sort the candidates both on the author name and the publication date in decreasing order. It is now easy to find the recent papers first-authored by prof. Felner. If we like to find papers where prof. Felner appeared as a co-author and not necessarily as a first author, we can sort on the publication date only and then filter the candidates. The filter respects the order in which the words appear in the candidate. So, if we add the word „Title:“ to the filter, we will make sure that the name of prof. Felner appears before the title of the paper (and not, say, in the editing commitee of a conference proceeding). So, let us cite the papers of prof. Felner from 2017. In my configuration,… multi-paper citations are automatically sorted in alphabetic order of the keys.
+
+# Let us now use the search to perform another action. For example, let us open the PDF of … this paper.
+
+#+BEGIN_HTML
+<p align="middle"> <a
+href="https://www.dropbox.com/s/7qr2rv9lsl43g5e/search.mp4?dl=0"> <img
+width=50%
+src="https://www.dropbox.com/s/prdwne1fpmy6x8r/search.png?raw=1"> </a>
+</p> 
+#+END_HTML
+
+One can also insert citations based on searching for a given string in the first page of all the paper PDFs contained in the =LiteRef= database. This is done with the =literef-search-pdfs= command. The following demo shows how to find all papers written by researchers from Toronto (e.g. in order to establish contacts with the researchers from Toronto working in his area).
+
+# **** Scenario
+# Say nothing.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/ie73e07layhktp8/toronto.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/augo3zrm80ifmfv/toronto.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="copy-paste">@@
+*** 3.2.2 Intelligent handling of copying and pasting citations
+:PROPERTIES:
+:CUSTOM_ID: user-content-copy-paste
+:END:
+When a (multi-)paper citation is inserted as shown [[#user-content-search][above]] or a BibTeX entry’s key is yanked from the /kill ring/ (which is the =Emacs= way of storing multiple pieces of text for future use) on top of an already existing citation, =LiteRef= makes sure that a well-formed multi-paper citation results. If automated ordering of citation is enabled (i.e. =literef-sort-citation-links= is set to =t=), then the keys will be sorted on the criteria specified by =literef-citation-link-sorting-criteria=. The order of keys appearing in a multi-paper citation can be changed at any time by invoking the =literef-sort-citation-link= command (bound by default to =C-c <down>=). This command offers the multi-criteria sorting capability familiar to the reader from the above section on [[#user-content-search][searching the papers database]]. The =literef-sort-citation-links= command (not bound to a key by default) can be used to re-order all the citation links in the current buffer.@@html:</p>@@
+
+# **** Scenario
+# Suppose we would like to add a paper to this three-paper citation. The cursor just happens to be in the middle of this long citation. We can simply cite more papers and leave it to =LiteRef= to take care of the formatting and ordering issues. So,… let’s cite these two papers. We see that a well-formed multi-paper citation resulted and the keys have been ordered according to the configuration, which is the alphabetic order of keys in my case…
+# Suppose we’d like this citation to follow the order of increasing publication date. I press =C-c <down>= to invoke the =literef-sort-citation-link= command, select the new ordering criteria and … the citation link is re-ordered.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/2dnxyz3yl6dus29/intelligent_pasting.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/j6v15naeqmc2q06/intelligent_pasting.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+In addition, =LiteRef= offers the =literef-copy-current-key= command (bound by default to =C-c w=), which puts the currently active citation key into the kill ring. When used in conjunction with =helm-show-kill-ring= and [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Bookmarks.html][bookmarks]] (which are one of those many tools Emacs has to make your life easier once you discover them), one can easily collect citations scattered all over his notes. 
+
+# Suppose we are working on our notes and would like to cite some of the papers already cited above… We are going to do this by putting the citations of interest into the kill ring. First, I save my place in a bookmark by pressing =C-x r m=. Now, I go over the notes and press =C-c w= to invoke the =literef-copy-current-key= command for each citation that I care to copy. Now I go back to the bookmarked place by pressing =C-x r b=.… I invoke the =helm-show-kill-ring= command, which allows one to search in the kill-ring. =LiteRef= modifies the default action of =helm-show-kill-ring=, so that we can yank all of the selected candidates. We rely on =LiteRef= for yanking the BibTeX keys in an intelligent manner. Thus, we obtain a well-formed multi-paper citation that we were looking for.
+
+# Contents of notes:
+
+# Culberson and Schaeffer coined the term /pattern databases/ cite:CulbersonS1998j-Patter-Datab.
+
+# …
+
+# A straightforward compression scheme for pattern databases has been proposed Felner et al. cite:FelnerKMH2007j-Compr-Patter. 
+
+# The recent work by Helmert et al. cite:HelmertSF2017c-On-Variab provides an experimental study of the /min-compression/ scheme cite:FelnerKMH2007j-Compr-Patter.
+
+# …
+
+# Compression of pattern databases continues to attract the researchers’ attention cite:KeshtkaranTZ2011c-Novel-Techn.
+
+# …
+
+# In conclusion, much work as been done on compression of pattern databases [begin paste here] cite:CulbersonS1998j-Patter-Datab,FelnerKMH2007j-Compr-Patter,HelmertSF2017c-On-Variab,KeshtkaranTZ2011c-Novel-Techn. This direction has not been exhausted, so more work is probably to follow.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/b6n2ffwf3eatvo8/collect.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/wzu61s974xhls70/collect.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+Note that automated ordering of keys in multi-paper citations may affect the operation of the =yank-pop= command. However, given the superior convenience offered by =helm-show-kill-ring=, this limitation should not discourage one from using automated ordering of citation keys.
+
+@@html:<a name="split">@@
+*** 3.2.3 Splitting a multi-paper citation
+:PROPERTIES:
+:CUSTOM_ID: user-content-split
+:END:
+Many a time it helps to organize a notes file such that each paper under study is given a headline or a list item. In =LiteRef=, this is easy to achieve by splitting a multi-paper citation using either =literef-split-cite= (bound to =C-c d= by default) or =literef-split-cite-title-author= (bound to =C-c s= by default). The latter adds authors and title to each paper. Both commands replicate the context of the original multi-paper citation (i.e. the preceding and the following text) with each resulting single-paper citation.@@html:</p>@@ 
+
+In addition, when the original multi-paper citation appears as a list item, =LiteRef= will offer to create an =org-mode= [[https://stackoverflow.com/q/11718401/2725810][inline task]] for each paper.
+
+# This feature is particularly powerful when the researcher would like to study the papers appearing in a particular journal volume or conference proceeding. The feature in action is shown in the following [[https://www.dropbox.com/s/misp2pwkeeoypyu/split.mp4?dl=0][demo]].  
+ 
+# **** Scenario
+# In this video, we show the various ways of splitting a multi-paper citation in preparation for further study of each of the cited papers. So, let us add some context before and after the citation… Now we press =C-c d= to invoke the =literef-split-cite= command. We see that each paper is now cited separately and the context is attached to each citation.
+
+# One interesting use of this feature is when the context causes the citations to become headlines or list items. So, let us perform a split so that each citation will become a headline… One of the things we can do with an =org-mode= headline is associate a status. So, here we defined the milestones of studying a paper. We can now change the paper’s status by pressing Shift with right or left arrow. However, if we export such an org file, each headline will become a section. We might not want that. So, let us try to use an itemized list instead… Since list items cannot have status associated with them, =LiteRef= offers us to associate an =org-mode= inline task with each paper. Let’s agree. We can now track the progress of studying the papers in the same way as with the headlines.
+
+# Since it may be inconvenient to have to hover with the mouse over a citation in order to view the paper’s title and authors,… =LiteRef= provides the =literef-split-cite-title-author= command… Let me press =C-c s= to split our multi-paper citation using this command. The effect is as before, except that each citation is preceeded by the paper’s title and authors. 
+
+# Notes:
+
+# #+TODO: UNREAD SURFACE IN-DEPTH | DONE
+
+# * "Pattern Databases" by Culberson, J. C., & Schaeffer, J. cite:CulbersonS1998j-Patter-Datab
+# * "Compressed Pattern Databases" by Felner, A., Korf, R. E., Meshulam, R., & Holte, R. C. cite:FelnerKMH2007j-Compr-Patter
+# * "On Variable Dependencies and Compressed Pattern Databases" by Helmert, M., Sturtevant, N. R., & Felner, A. cite:HelmertSF2017c-On-Variab
+# * "A Novel Technique for Compressing Pattern Databases in the Pancake Sorting Problems" by Keshtkaran, M., Taghizadeh, R., & Ziarati, K. cite:KeshtkaranTZ2011c-Novel-Techn
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/misp2pwkeeoypyu/split.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/rits0gcws7jak5f/split.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="actions">@@
+*** 3.2.4 Actions on a paper
+:PROPERTIES:
+:CUSTOM_ID: user-content-actions
+:END:
+To bring the actions menu associated with a cited paper, one needs to simply follow the citation link. This can be done either by pressing =C-c C-o= when the cursor is on the link or by mouse-clicking the link. The actions menu allows the user to open the BibTeX entry, the notes or the PDF associated with the paper. An additional recently added action is for building a [[#user-content-subgraph-notion][citation subgraph]] rooted at the paper.@@html:</p>@@ 
+
+When the cursor is located over a citation or the active buffer is visiting a file associated with the paper, each of the above actions can be invoked with a command:
+- =literef-open-bibfile= for opening the BibTeX entry is bound by default to =C-c b=.
+- =literef-open-notes= for opening the notes is bound by default to =C-c n=.
+- =literef-open-pdf= for opening the PDF is bound by default to =C-c o=. The next section describes what happens when the PDF for the paper has not yet been added to the =LiteRef= database.
+- =literef-select-subgraph= for building a [[#user-content-subgraph][citation subgraph]] rooted at the paper is bound by default to =C-c u=.
+
+These commands can also be invoked for an active candidate when [[#user-content-search][searching the papers database]].
+
+# **** Scenario
+# Here is a citation of two papers. I invoke the =org-open-at-point= command by pressing =C-c C-o= and get the action menu for the BibTeX key currently under cursor… I could get the same menu by clicking on the citation. The actions are self explanatory – I can open the BibTeX entry,… the notes for the paper…, or the paper’s PDF… I could also perform these actions directly. For example, I can open the PDF by invoking the =literef-open-pdf= command by pressing =C-c o=. I can also invoke these actions when visiting a file associated with the paper. For example, right now we are visiting PDF of the paper. So, let us open this paper’s BibTeX entry. I invoke the =literef-open-bibfile= command by pressing =C-c b=… Of course, the user can rebind all these and other commands to different key combinations for his best convenience.   
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/4rl36kkvdw4uqpy/actions.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/625bc7e06x11vur/actions.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="import-pdf">@@
+** 3.3 Importing PDF of a paper
+:PROPERTIES:
+:CUSTOM_ID: user-content-import-pdf
+:END:
+=LiteRef= takes a lazy approach to adding paper PDFs to the =LiteRef= database. Namely, importing a PDF is initiated when the user tries to open a PDF that is not currently in the database. The search for the needed PDF proceeds in three stages:
+1. If one or more PDF files exist in the =drop/= folder, the user is asked about each one of them whether it is the one being sought. If the answer for one of these PDFs is positive, that PDF is added to the database and opened. Otherwise, the next step is taken.
+2. The PDF is searched for in the online sources defined by the =PDF_AUTOMATED_SOURCES= [[https://github.com/mgoldenbe/LiteRef/blob/master/el/py/config.py][configuration]] variable of the server. The currently implemented online sources for PDFs are =GoogleScholar= and =SemanticScholar=. The user can add more online sources by extending [[https://github.com/mgoldenbe/LiteRef/blob/master/el/py/online_sources.py][online_sources.py]] with classes that implement interfaces documented in that module. If a matching PDF is found and confirmed by the user, it is added to the database and opened. Otherwise, the next step is taken.
+3. If the =PDF_MANUAL_SOURCE= [[https://github.com/mgoldenbe/LiteRef/blob/master/el/py/config.py][configuration]] variable of the server is not =None=, =LiteRef= opens the browser for searching in the online source specified by that variable. Once a new PDF appears in the =drop/= folder, =LiteRef= asks the user to match it with one of the BibTeX entries for which manual download of a PDF had been requested. If none of the entries is matched, the downloaded PDF remains in the =drop/= folder for future use, e.g. as described in the first step above.
+
+# **** Scenario
+# Here is a BibTeX entry for a paper for which there is no PDF in the =LiteRef= database. Let us first consider a scenario whereby we already have the PDF somewhere on the system… Here it is. We could of course copy that PDF manually into the paper’s folder… Alternatively, we can move all such PDFs into the drop/ folder… When we invoke =literef-open-pdf=, which is the regular command for opening the PDF… =LiteRef= offers to attach the PDF in the drop/ folder. If there are several papers there, we will be asked about each of them until we answer positively about one of these candidates or decline all of them… For this example, let us agree. The PDF is added to the =LiteRef= database and opened in Emacs…
+
+# Here is a different paper for which we do not have a PDF yet. This time, there is nothing in the drop/ folder and =LiteRef= will immediately begin by searching in the online sources, which are set to a single source, namely Semantic Scholar, in my configuration… I invoke the command for opening the PDF… The paper is found and, once we confirm that this is the paper we are looking for, it is added to the database and opened in Emacs.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/zeuh4q1ntmq2htg/import_pdf.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/9x9jqnqk74bl8uw/import_pdf.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="working-pdf">@@
+** 3.4 Working with PDF
+:PROPERTIES:
+:CUSTOM_ID: user-content-working-pdf
+:END:
+When it comes to working with the PDF of a paper, the rendering speed and features of the =pdf-tools= package of =Emacs= are prodigious. =LiteRef= integrates with the annotation capabilities of =pdf-tools= by providing the =literef-cite-pdf-annotation= command (bound by default to =C-c a=) for linking directly from the researcher’s notes to PDF annotations. Upon the command’s invocation, the user chooses among the currently visited paper PDFs using the uniquely =Emacs= [[https://www.emacswiki.org/emacs/InteractivelyDoThings][Interactively Do Things]] interface. The buffer visiting the chosen PDF becomes active and a single click is needed to choose the target annotation. Following that choice, the link to the PDF annotation is inserted at the point of the cursor in the notes buffer that was active at the time of invoking the command and that buffer becomes active again. If another kind of a buffer was active, the link is saved in the kill ring.@@html:</p>@@
+ 
+Following a link to a PDF annotation results in opening the corresponding paper’s PDF and jumping directly to the annotation.
+
+# **** Scenario
+# =LiteRef= allows the researcher to link from his notes directly to PDF annotations. This works both when the notes buffer is active… and when the PDF is active… Let’s now close the PDF. The links can still be clicked to go directly to the annotation.
+
+# Contents of notes:
+# …
+# A straightforward compression scheme for pattern databases has been proposed Felner et al. cite:FelnerKMH2007j-Compr-Patter. 
+# The recent work by Helmert et al. cite:HelmertSF2017c-On-Variab proves a relation between the compressed PDBs and the regular ones . They also provide an intuitive understanding of this result . 
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/tfozcxx7r1pcuqb/annotation_link.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/g65qiwz6rxz08mc/annotation_link.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="basic-export">@@
+** 3.5 Basic export of notes
+:PROPERTIES:
+:CUSTOM_ID: user-content-basic-export
+:END:
+=LiteRef= extends the functionality of the =org-export-dispatch= command. In its original form, this command was already capable of exporting notes in a variety of formats, including LaTeX and PDF. =LiteRef= extends the capabilities of this command, so that:
+- The bibliography based on the citations found in the buffer being exported is automatically built. The underlying bibliography file created by =LiteRef= contains only the papers that appear in the bibliography, ordered by the increasing order of the BibTeX key. The bibliography style and the bibliography package used for LaTeX export are determined by the [[https://github.com/mgoldenbe/LiteRef/blob/master/el/literef-config.el][configuration variables]] =literef-bibliography-style= and =literef-bibliography-package=, respectively.
+- Links to PDF annotations are replaced with references to page numbers.
+- [[#user-content-cf][Citation functions]] are removed.
+
+In addition to this command, =LiteRef= provides a much more powerful command for exporting, which we discuss [[#user-content-subgraph-export][below]].
+
+Two facilities can be particularly powerful when used in conjunction with the export feature of =LiteRef=:
+- Narrowing is a standard =Emacs= feature, whereby only part of the buffer is visible both to the user and to the commands. In addition to this standard narrowing, =org-mode= has the =org-narrow-to-subtree= command (bound by default to =C-x n s=), which narrows the buffer to the current headline. When each headline in the notes buffer is dedicated to a research (sub-)area, one can easily focus on that (sub-)area by narrowing the buffer to the corresponding headline. Since a subsequent export command would respect such narrowing, one can easily export notes pertaining to the part of his survey dedicated to the (sub-)area of interest. 
+- One of the keywords understood by =org-mode= is =#+INCLUDE=, which allows one to include an external file or a portion of it at the time of export. This allows the researcher to organize his notes into a collection of files, while still being able to collect these notes together for export.
+
+# **** Scenario
+# In this simplified example, the researcher maintains notes on three topics. In fact, notes on multi-agent pathfinding are maintained by a student of his who got interested in the topic… The researcher integrated the notes of his student by simply including them. Let us look inside the notes of the researcher for one of the topics. The notes use the =citeyear=-type citation and refer to a PDF annotation. We will see in just a moment how these are exported. I invoke the =org-export-dispatch= command,… choose exporting into PDF… and open the resulting document… The document contains all the notes including those of the student. Also, the bibliography has been inserted… The bibfile containing the entries used in this small survey has been produced as well… In addition, we see that the =citeyear= citation was respected and the PDF link was translated into a reference to the relevant page in the paper’s PDF… Now, suppose we would like to produce a document that contains only the notes on the very first topic. We narrow the buffer to the sub-tree and export to PDF. Here is the result… 
+
+# Contents of notes.org:
+# * Labeling approaches to answering shortest distance queries
+# A good representative of this approach is cite:AkibaIY2013c-Fast-Exact, which uses cut-offs based on 2-hop labeling (see annot:AkibaIY2013c-Fast-Exact:annot-2-28 for the description of the latter) introduced by Cohen et al. (citeyear:CohenHKZ2003j-Reach-And) to store enough information to retrieve distance between any pair of vertices. etc.
+# * Modern methods for optimal pathfinding on grids
+# ** Jump-point search
+# - "Online Graph Pruning for Pathfinding On Grid Maps" by Harabor, D. D., & Grastien, A. cite:HaraborG2011c-Onlin-Graph. 
+# There are also an enhancements of this method:
+# - "Improving Jump Point Search" by Harabor, D. D., & Grastien, A. cite:HaraborG2014c-Improv-Jump.
+# ** Compressed all-pairs databases
+# - "Path Planning with Compressed All-Pairs Shortest Paths Data" by Botea, A., & Harabor, D. cite:BoteaH2013c-Path-Plann
+# - "Ultra-Fast Optimal Pathfinding without Runtime Search" by Botea, A. cite:Botea2011c-Ultra-Fast
+# ** etc.
+# * Multi-agent pathfinding (optimal)
+# #+INCLUDE: "multi-agent.org"
+
+# Contents of multi-agent.org:
+# These notes are dedicated to surveying promising approaches to solving the /Multi-Agent Pathfinding/ (MAPF) problem optimally.
+# * Conflict-based search
+# The two-level search idea is initiated by cite:SharonSFS2012c-Confl-Based. The idea has been extended to compute plans that are resistant against delays cite:AtzmonFSWBZ2017c-Robus-Multi. 
+# * Etc.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/92pcdihsueyr879/basic_export.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/os5tc2x9okq044v/basic_export.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="cf">@@
+** 3.6 Defining and using citation functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-cf
+:END:
+The functionalities of =LiteRef= that aid the researcher in grasping the overall state of research in a given area are based on the notion of a /citation function/. Citation function is the role that the cited paper plays in the paper that cites it as reflected in the notes on the latter paper. For example, suppose that a paper /X/ cites a paper /Y/, because /X/ develops the ideas of /Y/. The researcher can reflect this in the notes on /X/ by citing /Y/ while specifying the citation function corresponding to the role of developing the ideas of the cited paper. It can look something like this: =cite:Y f:develops-ideas=. @@html:</p>@@  
+
+The set of citation functions in use is defined by the [[https://github.com/mgoldenbe/LiteRef/blob/master/el/literef-config.el][configuration variable]] =literef-citation-functions=. The citation functions can be conveniently inserted into the notes by using the =literef-citation-function= command (bound by default to C-c f). 
+# **** Scenario
+# Here is a simplified version of the notes on a paper about the algorithm by the abbreviated name of SFBDS. The notes state that this paper develops the ideas and improves on the experimental results of the original paper that introduced this algorithm. By using citation functions, we can state this explicitly, which will also enable features shown in the later demos. I press =C-c f= to invoke the =literef-citation-function= command. This prompts me to enter the citation functions using the =company= completion mode. If I press the Tab key right now, I will see all the citation functions that appear in my configuration file. So, I use the completion functionality to quickly enter the two relevant citation functions separated by comma. And, here we go…
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/dqqrvoyawm11grq/citation_function.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/qsk7v8c8mrkhp9r/citation_function.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="subgraph">@@
+** 3.7 The citation (sub-)graph
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph
+:END:
+
+@@html:<a name="graph-notion">@@
+*** 3.7.1 The notion of the citation graph
+:PROPERTIES:
+:CUSTOM_ID: user-content-graph-notion
+:END:
+The most powerful features of =LiteRef= are based on the observation that the papers and the citations (possibly labeled with citation functions) induce a directed graph with labeled arcs. This graph is called the /citation graph/. The vertex set of the citation graph is the set of all papers in the =LiteRef= database. If the notes for a paper /A/ cite a paper /B/ and this citation is labeled with citation functions /F1, F2, …, Fn/, then there is an arc in the citation graph from /A/ to /B/ labeled by the set /{F1, F2, …, Fn}/. If the notes of /A/ cite /B/ without specifying citation functions, the arc from /A/ to /B/ is labeled with the empty set. It is convenient, though not totally accurate, to call such an arc /unlabeled/ and we do so hereafter. If the notes for /A/ cite /B/ multiple times, then the arc from /A/ to /B/ is labeled by the union of the labels induced by each citation.@@html:</p>@@  
+
+=LiteRef= maintains the citation graph automatically. Namely, the citation graph is computed at the beginning of the =Emacs= session and updated whenever a notes file is saved.
+
+@@html:<a name="subgraph-notion">@@
+*** 3.7.2 The notion of the citation subgraph
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-notion
+:END:
+The /citation subgraph/ is a subgraph of the [[#user-content-graph-notion][citation graph]] induced by a subset of the papers in the =LiteRef= database, possibly appended with a vertex corresponding to an =Emacs= buffer and the (unlabeled) arcs corresponding to the citations in that buffer.@@html:</p>@@  
+
+At any given time, there is a single active citation subgraph, called the /selected subgraph/. When the =Emacs= session begins, the selected subgraph is the whole citation graph. This subgraph can be selected again at any time by invoking the =literef-subgraph-reset-selection= command.
+
+All the operations described [[#user-content-subgraph-operations][below]] work with the selected subgraph. In principle, this design allows working with multiple subgraphs, one being selected at a time. However, this is not yet supported. 
+
+@@html:<a name="subgraph-build">@@
+*** 3.7.3 Building a citation subgraph
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-build
+:END:
+A citation subgraph is built by invoking the =literef-select-subgraph= command bound by default to =C-c u=. This command performs a [[https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm][uniform-cost search]], with the root being either the active paper (i.e. the paper whose link is under the cursor or whose associated file is being visited by the active buffer) or (if there is no active paper) all the papers cited in the active buffer. The user can specify a filter for the arcs to be followed by the search. These arcs are called the /generating arcs/ of the resulting subgraph, which is induced by the papers reached by the search.@@html:</p>@@   
+
+The filter on the arcs is an expression in =Emacs Lisp=. This expression is evaluated for each candidate arc. A candidate arc is followed if and only if the filter evaluates to a value other than =nil=. When writing the filter, one can use the following variables:
+- The variable named after a citation function. This variable’s value is =t= if and only if the candidate arc’s label contains the corresponding citation function. Otherwise, it is =nil=. For example, if a citation function =develops-ideas= is defined, then the variable =develops-ideas= indicates whether the candidate label contains this specific citation function. 
+- =in=, which is =t= if and only if the candidate arc is incoming. Otherwise, it is =nil=.  
+- =out=, which is =t= if and only if the candidate arc is outgoing. Otherwise, it is =nil=.   
+- =depth=, which is the current depth of the search. The papers at the root of the search are at depth 0. The arcs (traversed either along or against the direction of the arc) leaving the root of the search are at depth 1, etc.
+
+Here is an example of a filter: =(and (or (and develops-ideas (< depth 3)) compares-results) out)=. This filter says that we would like to follow the arcs having the =develops-ideas= citation function in their label up to depth 2 and the arcs with the =compares-results= citation function in their label regardless of the depth. Furthermore, we would like to follow only the outgoing arcs.
+
+Basing arc filters on =Emacs Lisp= expressions augmented by special variables allows for great flexibility in specifying the citation subgraph. 
+
+The demonstration of selecting the citation subgraph is deferred to a [[#user-content-subgraph-vis][later section]] that introduces the capabilities of =LiteRef= for visualizing the selected subgraph.
+
+@@html:<a name="subgraph-operations">@@
+** 3.8 Operations on the citation subgraph
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-operations
+:END:
+The operations on the [[#user-content-subgraph-notion][citation subgraph]] are simple and yet very potent. The below descriptions reflect the simplicity of these operations, while the demonstrations reveal some of their potential applications.
+
+@@html:<a name="subgraph-vis">@@
+*** 3.8.1 Visualization
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-vis
+:END:
+Visualization of the citation subgraph allows the researcher to view a whole research area as represented by the selected subgraph at a glance. =LiteRef= provides two ways of visualization:
+- textual by means of the =literef-show-selected-subgraph= command (bound by default to =C-c v=). This command visualizes the selected subgraph in an =org= buffer. This allows the nodes in the visualization to contain regular citation links that support all the operations described [[#user-content-actions][above]]. In addition, the visualization can be scrolled by pressing an arrow while holding the Meta key.
+- graphical by means of the =literef-show-selected-subgraph-png= command.
+
+Whichever of the two commands is used, two [[https://github.com/mgoldenbe/LiteRef/blob/master/el/literef-config.el][configuration variables]] control the information that appears in the visualization: 
+- When =literef-subgraph-show-only-generating-arcs= is set (i.e. is not =nil=), the visualizations shows only the [[#user-content-subgraph-build][generating arcs]] of the selected subgraph. This variable is =nil= by default.
+- When =literef-subgraph-show-buffer= is set (i.e. is not =nil=) and the selected subgraph was built by searching from a buffer rather than from an active paper, the source buffer is shown as a node of the selected subgraph. This variable is =nil= by default.
+The two ways of visualization are demonstrated by the following two demos.
+
+# **** Scenario
+# Suppose I would like to explore the topic of compression of pattern databases. The PDF of the first paper on the topic is open right now, so that this paper is active. I press =C-c u= to invoke the =literef-select-subgraph= command and build a citation subgraph with this paper as the source. The filter will choose only the incoming arcs, so we will choose the papers that cite the first paper and the papers that cite those papers etc. The subgraph is built and displayed… If I want to display the selected subgraph at any later point, I can do that by invoking the =literef-show-selected-subgraph= command bound to =C-c v=. Let us see how the label of this arc came about. This label consists of two citation functions. Let’s look at the notes. Here is the first citation function and here is the other one… 
+
+# Let us try a slighly more complex filter. The central paper on the topic of compressed pattern databases is certainly this paper from 2007. Suppose I would like to see only the papers that directly cite this paper and claim orthogonality to its ideas. So, I click on this paper and select the action of building a subgraph. I am interested in the papers that cite this one and claim orthogonality with its ideas. So, I am interested in the incoming arcs at depth 1 that satisfy the =claims-orthogonality= predicate. Here we go… 
+
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/onvbbgzszs4xjc8/visualization.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/bn6m7blfv81yiim/visualization.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+# **** Scenario
+# Just like in the last demo, let us build the citation graph based on our survey of the topic of compressed pattern databases… Now, let us invoke the =literef-show-selected-subgraph-png= command to show a graphical representation of the graph. Here we go…
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/ebhlmkcvo8n74oj/visualization_png.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/4q6wntjip0dfe5p/visualization_png.png?raw=1">
+</a>
+</p>
+#+END_HTML
+   
+@@html:<a name="subgraph-search">@@
+*** 3.8.2 Search
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-search
+:END:
+The =literef-subgraph-helm= command (bound by default to =C-c )=) operates similarly to the =org-ref-insert-link= command explained [[#user-content-search][above]] with the exception that the set of candidate papers is limited to the current citation subgraph.@@html:</p>@@  
+# Suppose I’d like to make a list of papers on the topic of compressed pattern databases in the order of increasing publication date. I build the citation subgraph as before, only this time let’s invoke the build action using the helm interface… Now I press =C-c )= to invoke the  =literef-subgraph-helm= command, select all the papers and cite them. I order the new citation in the order of increasing publication date by pressing =C-c <down>= to invoke the =literef-sort-citation-link= command. Lastly, I split the citation to obtain the list of papers as desired.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/qq6a4h4u0hau87w/subgraph_search.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/9s5j6ppk6kp1gh1/subgraph_search.png?raw=1">
+</a>
+</p>
+#+END_HTML  
+
+@@html:<a name="subgraph-export">@@ 
+*** 3.8.3 Export
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-export
+:END:
+We already described [[#user-content-basic-export][above]] how =LiteRef= extends the functionality of the =org-export-dispatch= command. The =literef-subgraph-export-dispatch= command goes further – it performs export of the citation subgraph. The document for export is constructed in a temporary buffer using the following algorithm:
+- The document is initialized based on the subgraph’s source (i.e. the root of the [[#user-content-subgraph-build][search for building the citation subgraph]]). In particular:
+  + If the subgraph’s source is a buffer, the document is initialized to the contents of that buffer. However, if the source buffer does not exist or is visiting a different file, then the contents of the /file/ visited by the source buffer at the time of building the subgraph is used instead. In any case, the name of that file is used to compute the name of the exported document.  
+  + If the subgraph’s source is a paper or the =literef-select-subgraph= command for [[#user-content-subgraph-build][building the subgraph]] has not been invoked after the last reset of the subgraph, then the document is initialized to be empty. The user is requested to provide the name of the exported document. Depending on the source, the default folder is either the folder of the source paper or the value of the [[https://github.com/mgoldenbe/LiteRef/blob/master/el/literef-config.el][configuration variable]] =literef-survey-directory=.
+- The document is appended with the notes for the papers in the citation subgraph. Notes of each paper appear in a section of their own. The title of that section consists of the paper’s title and authors, followed by the citation link to the paper. Empty sections, i.e. sections dedicated to papers with empty notes, do not appear.
+- Optionally, a section containing all the notes as subsections can be created. This may be desirable when the subgraph’s source is a buffer containing several headlines. 
+- The =#+INCLUDE= directives are expanded.
+- A reference to the appropriate notes section is supplied for each paper citation. These references will conveniently become hyperlinks in the exported document.
+- Links to PDF annotations and citation functions are handled just like during the [[#user-content-basic-export][basic export]].
+- The bibliography is created. The underlying bibliography file contains only the papers cited in the document.
+
+# In this demo, we set out to create a survey on the subject of compressed pattern databases. This survey should begin with a short summary and proceed by presenting our notes about all the papers on the subject. We would like this document to be both organized into sections and extensively cross-referenced… Here is the summary I wrote. I deliberately kept this summary very short, so it does not even cite all the papers on the subject. Let us build a citation subgraph of the subject based on the papers cited in this summary… I invoke the =literef-subgraph-export-dispatch= command and export the selected subgraph into a PDF. Since our buffer does not have headlines, we do not need to create a notes section. Let us view the resulting document. It contains our summary and a section dedicated to each paper on the subject.… Each citation is supplied with a reference to the section discussing the cited paper. As during the basic export, the citation functions reference specific pages in the papers. The bibliography concludes the document…
+
+# Contents of the summary file.
+# #+OPTIONS: toc:nil
+# #+TITLE: A Survey on Compressed Pattern Databases
+# #+AUTHOR: by Meir Goldenberg
+
+# This survey explores the subject of /compressed pattern databases/ as described in the work of Felner et al. (citeyear:FelnerMHK2004c-Compr-Patter) and followed up by a number of more recent papers. Approaches taken by the latter papers are, in many cases, very different from the approach taken by Felner et al.
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/cvivo5eft1ps7h9/subgraph_export.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/5n3wf5umzaorbb6/subgraph_export.png?raw=1">
+</a>
+</p>
+#+END_HTML 
+
+@@html:<a name="subgraph-vis-export">@@
+*** 3.8.4 Visualization in export
+:PROPERTIES:
+:CUSTOM_ID: user-content-subgraph-vis-export
+:END:
+The researcher can put visualizations of various parts of the citation graph into the exported document, both for the [[#user-content-basic-export][basic]] and for the [[#user-content-subgraph-export][subgraph]] export. This is done by inserting a [[https://orgmode.org/guide/Working-With-Source-Code.html][code block]] that calls the =literef-subgraph-image-file-link= function, which builds a subgraph, saves its graphical visualization into a temporary file and returns a link to that file along with the necessary attributes for export. Although this function takes quite a few arguments, =LiteRef= makes things easy by providing the =literef-insert-subgraph-image-file-link= command, which is basically a wizard for constructing a call to =literef-subgraph-image-file-link=. Once the researcher provides the information requested by this command, the corresponding code block is inserted automatically.@@html:</p>@@  
+
+Lastly, the user should remember that the export features discussed in this manual are not limited to exporting into LaTeX or PDF. In particular, the researcher can put exporting into HTML to good use for sharing his knowledge with students and colleagues.
+
+# **** Scenario
+# Let us once again use this short introduction and build a citation subgraph for the topic of compressed pattern databases… But this time, let us also include a visualization of this subgraph into the exported document… To conveniently insert the needed source block, I call the =literef-insert-subgraph-image-file-link= command. I will choose the current file as the source for the subgraph and specify the same filter as for the selected subgraph. Of course, I could choose to visualize any other subgraph. Understanding some of the queries of the wizard may require reading up on the export attributes of image links. All the queries are self-explanatory otherwise… OK, the source block is inserted. Let us now export the selected subgraph into PDF and open the resulting document… We now have a handy graphical summary of the topic on the first page… 
+
+# Let us now see how our document would look in HTML. Here we go… 
+
+#+BEGIN_HTML
+<p align="middle">
+<a href="https://www.dropbox.com/s/4o3gek4f4afeuw4/export_visualization.mp4?dl=0">
+<img 
+width=50%
+src="https://www.dropbox.com/s/g8mm4r0prsdvxy2/export_visualization.png?raw=1">
+</a>
+</p>
+#+END_HTML
+
+@@html:<a name="install">@@
+* 4 Installation
+:PROPERTIES:
+:CUSTOM_ID: user-content-install
+:END:
+Please use the instructions for automated installation, unless your system does not use the =apt= manager or some other circumstances necessitate a manual install.
+
+@@html:<a name="install-auto">@@
+** 4.1 Automated installation
+:PROPERTIES:
+:CUSTOM_ID: user-content-install-auto
+:END:
+
+=LiteRef= comes with the =install.sh= script, which uses the =apt= manager to install all the dependencies of the server. In particular, it installs the =pip= manager and uses the latter to install all the needed =Python= libraries. So, simply run this script to install the system. =LiteRef= installs the needed Emacs packages automatically as well.
+
+@@html:<a name="install-manual">@@
+** 4.2 Manual installation
+:PROPERTIES:
+:CUSTOM_ID: user-content-install-manual
+:END:
+
+In case manual installation is required (e.g. if your system does not use the =apt= manager), you will need to install the following packages (only the packages not installed by default in Ubuntu 18.04 LTS, as well as =pip=, are listed). To install these packages, you will need to use the equivalent of the commands provided in parentheses.
+- pip (=sudo apt install python-pip=)
+- Tkinter (=sudo apt install python-tk=)
+- pdfgrep (=sudo apt install pdfgrep=)
+- Graph::Easy (=sudo apt install libgraph-easy-perl=)
+- Graphviz (=sudo apt install graphviz=)
+- ChromeDriver (download from [[http://chromedriver.chromium.org/downloads]] and put the executable into a folder listed in =PATH=).
+- pyinotify (=sudo pip install pyinotify=).
+- flufl.enum (=sudo pip install flufl.enum=).
+- PybTex (=sudo pip install pybtex=)
+- requests (=sudo pip install requests=)
+- Selenium (=sudo pip install selenium=)
+# - Pyperclip (=sudo pip install pyperclip=)
+# - xsel (=sudo apt install xsel=)
+
+=LiteRef= relies on the following =Emacs= packages:
+- org
+- org-ref
+- pdf-tools (you will need to run the =pdf-tools-install= interactive command in =Emacs= after installing the package from the package manager).
+- smooth-scrolling
+- company
+
+@@html:<a name="config">@@
+** 4.3 Configuration
+:PROPERTIES:
+:CUSTOM_ID: user-content-config
+:END:
+
+The following lines need to appear in the =Emacs= configuration file:
+#+BEGIN_SRC emacs-lisp
+(setq literef-directory "/home/meir/LiteRef/")
+(add-to-list 'load-path (concat literef-directory "el/"))
+(load-file (concat literef-directory "el/literef.el"))
+#+END_SRC
+Please make sure to edit the path in the definition of =literef-directory=.
+
+* 5 Version and license information
+:PROPERTIES:
+:CUSTOM_ID: user-content-license
+:END:
+
+@@html:<a name="license">@@
+- *Version:* 0.1
+- *Author:* Meir Goldenberg ([[mailto:mgoldenbe@gmail.com][mgoldenbe@gmail.com]])
+- *Copyright:* GNU General Public License
+- *Warning:* The packages used by =LiteRef= come with their respective licenses.
+
+@@html:<a name="future">@@
+* 6 Bug reports and future work
+:PROPERTIES:
+:CUSTOM_ID: user-content-future
+:END:
+
+@@html:<a name="future">@@
+Please send bug reports and feature requests to the author. The current list of requested features and bug reports can be found in the files =future.org= and =bugs.org= in the root folder of =LiteRef=.
+
+@@html:<a name="api">@@
+* 7 The API
+:PROPERTIES:
+:CUSTOM_ID: user-content-api
+:END:
+
+@@html:<a name="api">@@
+The documentation follows =Emacs Lisp= conventions:
+- Function descriptions typeset formal arguments in all capital letters.
+- Function descriptions describe the formal arguments inline rather than starting the description of each parameter on a separate line.
+- Optional arguments are separated from the obligatory ones by the keyword =&optional= in the function signature.
+- The name of an unused formal argument begins with an underscore.
+- The formal argument named =orig-fun= is accepted by functions that modify (see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html][Advising Emacs Lisp Functions]]) existing functions. This argument stands for the original function.
+
+The following is some of the =Emacs Lisp= terminology used throughout
+the following API documentation:
+- /point/ -- the position of the text cursor.
+- /cons/ -- see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Cons-Cells.html][Lists and Cons Cells]]. 
+- /alist/ -- see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html][Association Lists]].
+- /plist/ -- see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Property-Lists.html#Property-Lists][Property Lists]].
+- =t= -- the value denoting =True=.
+- =nil= -- the value denoting empty list or =False=. 
+
+Please follow [[http://homedir.jct.ac.il/~mgoldenb/literef_server/index.html][this link]] to the documentation of the server API.
+
+@@html:<a name="module-literef">@@
+** 7.1 Module literef.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef
+:END:
+
+This module loads all the features of the system, starts the server and performs some general setting up tasks.
+@@html:<a name="funcs-module-literef">@@
+*** 7.1.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef
+:END:
+
+@@html:<a name="func-literef-completion-fallback-candidates">@@
+**** 7.1.a.1 literef-completion-fallback-candidates(_orig-fun)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-completion-fallback-candidates
+:END:
+
+The LiteRef version of =bibtex-completion-fallback-candidates=. It simply returns =bibtex-completion-fallback-options= without appending this list by all the BibTeX files.
+@@html:<a name="func-literef-install-packages">@@
+**** 7.1.a.2 literef-install-packages
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-install-packages
+:END:
+
+Install any missing packages. The code is taken from
+[[https://stackoverflow.com/a/10093312/2725810]].
+@@html:<a name="vars-module-literef">@@
+*** 7.1.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef
+:END:
+
+No variables are defined by this module.
+@@html:<a name="module-literef-citation-functions">@@
+** 7.2 Module literef-citation-functions.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-citation-functions
+:END:
+
+This module defines the citation functions link and functions for computing its help echo and for providing a convenient completing read interface for entering the citation functions.
+@@html:<a name="funcs-module-literef-citation-functions">@@
+*** 7.2.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-citation-functions
+:END:
+
+@@html:<a name="func-literef-citation-function">@@
+**** 7.2.a.1 literef-citation-function
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-function
+:END:
+
+Annotate the currently active citation link with user-selected
+citation functions.
+@@html:<a name="func-literef-citation-function-help-echo">@@
+**** 7.2.a.2 literef-citation-function-help-echo(_window _object position)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-function-help-echo
+:END:
+
+Compute the help echo that appears when hovering over a citation
+function link. This particular implementation only uses POSITION of
+the mouse. The technique is described at
+[[http://kitchingroup.cheme.cmu.edu/blog/2016/11/04/New-link-features-in-org-9/#org1c56ce9]].
+@@html:<a name="func-literef-input-functions">@@
+**** 7.2.a.3 literef-input-functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-input-functions
+:END:
+
+Prompt the user to input citation functions using the completing
+read interface. Returns the list of selected citation functions.
+@@html:<a name="vars-module-literef-citation-functions">@@
+*** 7.2.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-citation-functions
+:END:
+
+No variables are defined by this module.
+@@html:<a name="module-literef-citation-link">@@
+** 7.3 Module literef-citation-link.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-citation-link
+:END:
+
+This module contains functions that handle citation links and operations involving them: hovering over, clicking, splitting, ordering keys and others.
+@@html:<a name="funcs-module-literef-citation-link">@@
+*** 7.3.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-citation-link
+:END:
+
+@@html:<a name="func-literef-after-citation-type-p">@@
+**** 7.3.a.1 literef-after-citation-type-p
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-after-citation-type-p
+:END:
+
+Return t if point is after a citation link of any kind
+(e.g. =citeauthor:=) and nil otherwise.
+@@html:<a name="func-literef-after-string-p">@@
+**** 7.3.a.2 literef-after-string-p(string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-after-string-p
+:END:
+
+Return t if point is after STRING and nil otherwise.
+@@html:<a name="func-literef-bibtex-from-clipboard">@@
+**** 7.3.a.3 literef-bibtex-from-clipboard
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-bibtex-from-clipboard
+:END:
+
+Create an entry in the papers database from the BibTeX entry
+currently in the clipboard.
+@@html:<a name="func-literef-cite-onclick-function">@@
+**** 7.3.a.4 literef-cite-onclick-function
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-cite-onclick-function
+:END:
+
+Handle following a citation link by offering a menu of actions that can be performed on the link.
+@@html:<a name="func-literef-copy-current-key">@@
+**** 7.3.a.5 literef-copy-current-key
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-copy-current-key
+:END:
+
+Save the current key for later intelligent yanking.
+@@html:<a name="func-literef-insert-for-yank">@@
+**** 7.3.a.6 literef-insert-for-yank(orig-fun string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-insert-for-yank
+:END:
+
+The version of =insert-for-yank= that handles the keys being yanked intelligently.
+
+The STRING to be yanked is preceeded by the prefix computed as follows:
+
+1. Split the contents being yanked based on commas and analyze the first entry. If it is not a valid key, the prefix is empty. Otherwise, proceed to step 2. 
+
+2. If over a citation key, go to its end and set the prefix to be comma.
+
+3. Otherwise, if the point is right after comma that follows a citation key or after a citation type (e.g. =citeauthor:=), the prefix is empty. 
+
+4. Otherwise, the prefix is "cite:".
+
+After the original function is called for the prefixed STRING, the current citation link (if the cursor is over one) is sorted subject to the value of the variable [[#user-content-var-literef-sort-citation-links][literef-sort-citation-links]]. 
+
+@@html:<a name="func-literef-key-string">@@
+**** 7.3.a.7 literef-key-string(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-string
+:END:
+
+Compute a string consisting of title and author based on the KEY.
+@@html:<a name="func-literef-sort-citation-link">@@
+**** 7.3.a.8 literef-sort-citation-link(&optional no-read-criteria criteria)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-sort-citation-link
+:END:
+
+Sort keys in the current citation. The sorting criteria are read from the user, unless the optional NO-READ-CRITERIA is set. If NO-READ-CRITERIA is set, then, if CRITERIA is set as well, it is used as the sorting criteria. Otherwise, the value of the variable [[#user-content-var-literef-citation-link-sorting-criteria][literef-citation-link-sorting-criteria]] is used as the sorting criteria.
+@@html:<a name="func-literef-sort-citation-links">@@
+**** 7.3.a.9 literef-sort-citation-links(&optional no-read-criteria)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-sort-citation-links
+:END:
+
+Sort all citation links in the current buffer. The sorting criteria criteria are read from the user, unless the optional NO-READ-CRITERIA is set, in which case the value of the variable [[#user-content-var-literef-citation-link-sorting-criteria][literef-citation-link-sorting-criteria]] is used as the sorting criteria.
+@@html:<a name="func-literef-sort-keys">@@
+**** 7.3.a.10 literef-sort-keys(keys criteria)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-sort-keys
+:END:
+
+Sort KEYS according to CRITERIA, which can be either a string or a list of characters as in the variable [[#user-content-var-literef-citation-link-sorting-criteria][literef-citation-link-sorting-criteria]].
+@@html:<a name="func-literef-split-cite">@@
+**** 7.3.a.11 literef-split-cite
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-split-cite
+:END:
+
+Like [[#user-content-func-literef-split-cite-title-author][literef-split-cite-title-author]], but without prepending each citation with title and author.
+@@html:<a name="func-literef-split-cite-raw">@@
+**** 7.3.a.12 literef-split-cite-raw(insert-title-author)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-split-cite-raw
+:END:
+
+Split the first multi-paper citation found on the current line, so that each paper is cited on a separate line, while the text preceeding and succeeding the original citation is duplicated on each line. Insert information about title and author before the key if INSERT-TITLE-AUTHOR is not nil.
+@@html:<a name="func-literef-split-cite-title-author">@@
+**** 7.3.a.13 literef-split-cite-title-author
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-split-cite-title-author
+:END:
+
+Split the first multi-paper citation found on the current line, so that each paper is cited on a separate line, preceeded by the information about title and author. The text preceeding and succeeding the original citation is duplicated on each line. Insert information about title and author before the key.
+@@html:<a name="vars-module-literef-citation-link">@@
+*** 7.3.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-citation-link
+:END:
+
+No variables are defined by this module.
+@@html:<a name="module-literef-config">@@
+** 7.4 Module literef-config.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-config
+:END:
+
+This module defines the variables the control the functionalities of LiteRef and sets their values. It defines key shortcuts for frequently used commands as well. The user is welcome to set these variables and shortcuts to suit his needs and taste.
+@@html:<a name="funcs-module-literef-config">@@
+*** 7.4.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-config
+:END:
+
+No functions are defined by this module.
+@@html:<a name="vars-module-literef-config">@@
+*** 7.4.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-config
+:END:
+
+@@html:<a name="var-literef-arc-filter-variables-prefix">@@
+**** 7.4.b.1 literef-arc-filter-variables-prefix
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-arc-filter-variables-prefix
+:END:
+
+The prefix used for the names of the special variables in the
+  specification of the arc filter. See [[#user-content-func-literef-arc-filter-variables][literef-arc-filter-variables]]
+  and [[#user-content-func-literef-arc-filter-temp-variable][literef-arc-filter-temp-variable]].
+@@html:<a name="var-literef-bibliography-package">@@
+**** 7.4.b.2 literef-bibliography-package
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-bibliography-package
+:END:
+
+The bibliography package to be used for LaTeX export. If nil, no
+  package specification is inserted into the document.
+@@html:<a name="var-literef-bibliography-style">@@
+**** 7.4.b.3 literef-bibliography-style
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-bibliography-style
+:END:
+
+The bibliography style to be used for LaTeX export. If nil, no
+  bibliography style specification is inserted into the document.
+@@html:<a name="var-literef-citation-function-color">@@
+**** 7.4.b.4 literef-citation-function-color
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-citation-function-color
+:END:
+
+The color of citation function links.
+@@html:<a name="var-literef-citation-function-link">@@
+**** 7.4.b.5 literef-citation-function-link
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-citation-function-link
+:END:
+
+The link name for specifying citation functions.
+@@html:<a name="var-literef-citation-functions">@@
+**** 7.4.b.6 literef-citation-functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-citation-functions
+:END:
+
+Types of citation functions used for annotating citations.
+@@html:<a name="var-literef-citation-link-sorting-criteria">@@
+**** 7.4.b.7 literef-citation-link-sorting-criteria
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-citation-link-sorting-criteria
+:END:
+
+The sorting criteria for automatic sorting of citation links. It is
+  a string consisting of comma-separated characters that stand for sorting
+  criteria. The following characters in parentheses can be used: Key↑
+  (k), Key↓ (K), Creation Date↑ (d), Creation Date↓ (D), Author↑ (a),
+  Author↓ (A), Title↑ (t), Title↓ (T), Venue↑ (v), Venue↓ (V), Venue
+  Type↑ (w), Venue Type↓ (W), Year↑ (y), Year↓ (Y).
+@@html:<a name="var-literef-default-image-html-attrs">@@
+**** 7.4.b.8 literef-default-image-html-attrs
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-default-image-html-attrs
+:END:
+
+The default attributes for an inline image for HTML export. See [[https://www.gnu.org/software/emacs/manual/html_node/org/Images-in-HTML-export.html]] and [[https://orgmode.org/worg/org-tutorials/images-and-xhtml-export.html]] for the description of the possible attributes.
+@@html:<a name="var-literef-default-image-latex-attrs">@@
+**** 7.4.b.9 literef-default-image-latex-attrs
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-default-image-latex-attrs
+:END:
+
+The default attributes for an inline image for LaTeX export. See [[https://www.gnu.org/software/emacs/manual/html_node/org/LaTeX-specific-attributes.html]] for the description of the possible attributes. Note that, when backslash is used, four backslashes need to be typed.
+@@html:<a name="var-literef-drop-directory">@@
+**** 7.4.b.10 literef-drop-directory
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-drop-directory
+:END:
+
+The folder for dropping new files, such as downloaded BibTeX entries and
+  PDF files. LiteRef uses this folder for files representing server
+  requests as well.
+@@html:<a name="var-literef-equal-timestamps">@@
+**** 7.4.b.11 literef-equal-timestamps
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-equal-timestamps
+:END:
+
+The number of seconds, within which creation timestamps of two
+  papers database entries corresponding to two candidates in helm are
+  considered to be same with respect to sorting the candidates.
+@@html:<a name="var-literef-graph-font-height">@@
+**** 7.4.b.12 literef-graph-font-height
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-graph-font-height
+:END:
+
+The font height used in the textual visualization of the selected subgraph.
+@@html:<a name="var-literef-papers-directory">@@
+**** 7.4.b.13 literef-papers-directory
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-papers-directory
+:END:
+
+The folder containing the papers database.
+@@html:<a name="var-literef-pdf-annotation-color">@@
+**** 7.4.b.14 literef-pdf-annotation-color
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-pdf-annotation-color
+:END:
+
+The color of PDF annotation links.
+@@html:<a name="var-literef-pdf-annotation-link">@@
+**** 7.4.b.15 literef-pdf-annotation-link
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-pdf-annotation-link
+:END:
+
+The link name for citing a PDF annotation.
+@@html:<a name="var-literef-sort-citation-links">@@
+**** 7.4.b.16 literef-sort-citation-links
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-sort-citation-links
+:END:
+
+Determines whether citation links should be sorted on-the-fly.
+@@html:<a name="var-literef-subgraph-show-buffer">@@
+**** 7.4.b.17 literef-subgraph-show-buffer
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-subgraph-show-buffer
+:END:
+
+Determines whether a node corresponding to the source buffer is to be shown in the subgraph visualization.
+@@html:<a name="var-literef-subgraph-show-only-generating-arcs">@@
+**** 7.4.b.18 literef-subgraph-show-only-generating-arcs
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-subgraph-show-only-generating-arcs
+:END:
+
+Determines whether the set of arcs in the visualization of the selected subgraph should be restricted to the arcs traversed by the uniform-cost search that built the subgraph.
+@@html:<a name="var-literef-survey-directory">@@
+**** 7.4.b.19 literef-survey-directory
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-survey-directory
+:END:
+
+The folder used by default for exporting the survey.
+@@html:<a name="module-literef-export">@@
+** 7.5 Module literef-export.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-export
+:END:
+
+This module contains functions for creating the survey, including the the wizard for inserting subgraph visualizations.
+@@html:<a name="funcs-module-literef-export">@@
+*** 7.5.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-export
+:END:
+
+@@html:<a name="func-literef-export-file-name-without-ext">@@
+**** 7.5.a.1 literef-export-file-name-without-ext(orig-file-name)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-export-file-name-without-ext
+:END:
+
+Returns the file name for export without extension. ORIG-FILE-NAME is like FILE in =org-export-to-file=. Thus, the file name may need to be computed from the selected subgraph's source or input by the user.
+@@html:<a name="func-literef-export-to-file">@@
+**** 7.5.a.2 literef-export-to-file(orig-fun backend file &rest args)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-export-to-file
+:END:
+
+The version of =org-export-to-file= that supports exporting the selected subgraph. BACKEND and FILE are as in =org-export-to-file=.
+
+It performs some pre-processing and then calls ORIG-FUN, which is the original =org-export-to-file=. When exporting the selected subgraph, the pre-processing includes computing the file name for export to be passed to =org-export-to-file=.
+@@html:<a name="func-literef-insert-note-references">@@
+**** 7.5.a.3 literef-insert-note-references
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-insert-note-references
+:END:
+
+For each citation in the current buffer, insert a reference to the sections corresponding to the keys in the selected subgraph. Properly handle comma-separated citations.
+@@html:<a name="func-literef-insert-subgraph-image-file-link">@@
+**** 7.5.a.4 literef-insert-subgraph-image-file-link
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-insert-subgraph-image-file-link
+:END:
+
+The interactive wizard for inserting the code block that calls [[#user-content-func-literef-subgraph-image-file-link][literef-subgraph-image-file-link]], with the purpose of having a subgraph visualization in the survey.
+@@html:<a name="func-literef-key-notes-p">@@
+**** 7.5.a.5 literef-key-notes-p(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-notes-p
+:END:
+
+Return t if the notes for KEY are valid notes that can be inserted into a survey and nil otherwise. Currently the notes are considered valid if they are not empty.
+@@html:<a name="func-literef-keys-to-insert">@@
+**** 7.5.a.6 literef-keys-to-insert
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-keys-to-insert
+:END:
+
+Compute the list of keys whose notes are to be inserted into the survey.
+@@html:<a name="func-literef-make-bib-file">@@
+**** 7.5.a.7 literef-make-bib-file(bib-file-name)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-make-bib-file
+:END:
+
+Make the bibliography file named BIB-FILE-NAME containing only the entries for the keys appearing in the survey.
+@@html:<a name="func-literef-reference-text">@@
+**** 7.5.a.8 literef-reference-text(keys)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-reference-text
+:END:
+
+Compute text for the reference for the given KEYS, e.g. "[1,4,10]".
+@@html:<a name="func-literef-remove-citation-functions">@@
+**** 7.5.a.9 literef-remove-citation-functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-remove-citation-functions
+:END:
+
+Remove all citation function links and the spaces preceding them in the current buffer.
+@@html:<a name="func-literef-source-buffer-string">@@
+**** 7.5.a.10 literef-source-buffer-string
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-source-buffer-string
+:END:
+
+Return the contents of the source buffer, as follows:
+
+1. During basic export, i.e. if not exporting the selected subgraph, return contents of the current buffer.
+
+2. Otherwise, if the source is a paper or the whole citation graph, then return empty string. 
+
+3. Otherwise, if the source buffer of the selected subgraph exists and is visiting the source file, then the source buffer's contents is returned. 
+
+4. Otherwise, return the source file's contents if that file exists. 
+
+5. Otherwise, abort the export and report an error.
+@@html:<a name="func-literef-subgraph-export-dispatch">@@
+**** 7.5.a.11 literef-subgraph-export-dispatch
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-export-dispatch
+:END:
+
+The version of =org-export-dispatch= that works with the selected subgraph.
+@@html:<a name="func-literef-subgraph-image-file-link">@@
+**** 7.5.a.12 literef-subgraph-image-file-link(key-or-file literef-subgraph-show-buffer buffer-node-name filter caption name attr-latex attr-html)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-image-file-link
+:END:
+
+Create an image for the subgraph with the source specified by KEY-OR-FILE and the arcs filter string FILTER, while respecting the value of LITEREF-SUBGRAPH-SHOW-BUFFER (see the variable [[#user-content-var-literef-subgraph-show-buffer][literef-subgraph-show-buffer]]) and BUFFER-NODE-NAME (see [[#user-content-func-literef-select-subgraph-for-export][literef-select-subgraph-for-export]] and the variable [[#user-content-var-literef-subgraph-show-buffer][literef-subgraph-show-buffer]]). Return a link to the created image. The caption, name and export attributes are set using the last three arguments.
+@@html:<a name="func-literef-subgraph-image-file-name">@@
+**** 7.5.a.13 literef-subgraph-image-file-name(file-name)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-image-file-name
+:END:
+
+Compute the file name for the image visualizing the subgraph. If FILE-NAME is under the LiteRef directory, return the ELisp expression that constructs the file name using the value of the variable [[#user-content-var-literef-directory][literef-directory]], which must be defined in =Emacs= configuration (hence not linked in the HTML documentation). Otherwise, return FILE-NAME as is surrounded by quotes.
+@@html:<a name="vars-module-literef-export">@@
+*** 7.5.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-export
+:END:
+
+@@html:<a name="var-literef-no-section-reference">@@
+**** 7.5.b.1 literef-no-section-reference
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-no-section-reference
+:END:
+
+The value of this variable is inserted by the exporter before citations that should not be supplied by reference during the later phase of export. This trick is used to avoid inserting self-references in the section headings of the survey.
+@@html:<a name="module-literef-graph">@@
+** 7.6 Module literef-graph.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-graph
+:END:
+
+This module contains functions for both building the citation graph from scratch and updating it dynamically upon changes in the researcher's notes. The updates take place whenever notes associated with a key are saved.
+@@html:<a name="funcs-module-literef-graph">@@
+*** 7.6.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-graph
+:END:
+
+@@html:<a name="func-literef-add-citation-and-functions-to-hash">@@
+**** 7.6.a.1 literef-add-citation-and-functions-to-hash(citation-link functions hash)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-add-citation-and-functions-to-hash
+:END:
+
+Add keys in CITATION-LINK and the citation FUNCTIONS to  HASH, in which keys are keys of BibTeX entries and values are sets of citation functions corresponding to the keys. Return the resulting hash.
+@@html:<a name="func-literef-compute-graph">@@
+**** 7.6.a.2 literef-compute-graph
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-compute-graph
+:END:
+
+Compute the citation graph, with keys corresponding to all the papers in the papers database in the vertex set, from scratch.
+@@html:<a name="func-literef-graph-add-arc">@@
+**** 7.6.a.3 literef-graph-add-arc(from-key to-key citation-functions &optional graph)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-add-arc
+:END:
+
+Add an arc in GRAPH from FROM-KEY to TO-KEY labeled by CITATION-FUNCTIONS. If GRAPH is not specified, it is given by the current value of the variable [[#user-content-var-literef-graph][literef-graph]].
+@@html:<a name="func-literef-graph-add-key">@@
+**** 7.6.a.4 literef-graph-add-key(key &optional graph)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-add-key
+:END:
+
+Add KEY to GRAPH. If GRAPH is not specified, it is given by the current value of the variable [[#user-content-var-literef-graph][literef-graph]].
+@@html:<a name="func-literef-graph-arc-label">@@
+**** 7.6.a.5 literef-graph-arc-label(from-key to-key &optional graph)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-arc-label
+:END:
+
+Return the citation functions by which an arc in GRAPH from FROM-KEY to TO-KEY is labeled. If GRAPH is not specified, it is given by the current value of the variable [[#user-content-var-literef-graph][literef-graph]].
+@@html:<a name="func-literef-graph-key-entry">@@
+**** 7.6.a.6 literef-graph-key-entry(key &optional no-error)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-key-entry
+:END:
+
+Return the set of arcs associated with KEY. If KEY is not in the citation graph, but is a valid key from the database, then add it to the citation graph. If KEY is not a valid key, then, throw fatal error instead, unless NO-ERROR is not nil, in which case nil is returned.
+@@html:<a name="func-literef-graph-update-key">@@
+**** 7.6.a.7 literef-graph-update-key(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-update-key
+:END:
+
+Update the citation graph based on the current version of the notes associated with KEY.
+@@html:<a name="func-literef-init-graph">@@
+**** 7.6.a.8 literef-init-graph(&optional init-keys)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-init-graph
+:END:
+
+Initialize the citation graph using INIT-KEYS as the list of keys. If the optional INIT-KEYS is not specified, all of the keys in the papers database are used.
+@@html:<a name="func-literef-key-in-neighbors">@@
+**** 7.6.a.9 literef-key-in-neighbors(key &optional graph)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-in-neighbors
+:END:
+
+Compute the in-neighbors of KEY in GRAPH. If GRAPH is not specified, it is given by the current value of the variable [[#user-content-var-literef-graph][literef-graph]]. If KEY is not in GRAPH, it is added.
+@@html:<a name="func-literef-key-out-citations">@@
+**** 7.6.a.10 literef-key-out-citations(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-out-citations
+:END:
+
+Compute a mapping, where keys are citations in the notes associated with KEY and values are functions associated with each citation.
+@@html:<a name="func-literef-key-out-neighbors">@@
+**** 7.6.a.11 literef-key-out-neighbors(key &optional graph)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-out-neighbors
+:END:
+
+Compute the out-neighbors of KEY in GRAPH. If GRAPH is not specified, it is given by the current value of the variable [[#user-content-var-literef-graph][literef-graph]]. If KEY is not in GRAPH, it is added.
+@@html:<a name="func-literef-out-citations">@@
+**** 7.6.a.12 literef-out-citations
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-out-citations
+:END:
+
+For the current buffer, compute a mapping, where keys are citations (i.e. keys of the BibTeX entries of the cited papers) and values are functions associated with each citation.
+@@html:<a name="func-literef-save-hook">@@
+**** 7.6.a.13 literef-save-hook
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-save-hook
+:END:
+
+This hook is called to update the citation graph whenever the notes associated with a key are saved.
+@@html:<a name="vars-module-literef-graph">@@
+*** 7.6.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-graph
+:END:
+
+@@html:<a name="var-literef-graph">@@
+**** 7.6.b.1 literef-graph
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-graph
+:END:
+
+The citation graph.
+@@html:<a name="module-literef-helm">@@
+** 7.7 Module literef-helm.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-helm
+:END:
+
+This module contains functions that implement the formation of the candidate list of the =helm= interface for searching in the papers database and handle actions associated with these candidates.
+@@html:<a name="funcs-module-literef-helm">@@
+*** 7.7.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-helm
+:END:
+
+@@html:<a name="func-literef-action-transformer">@@
+**** 7.7.a.1 literef-action-transformer(_orig-fun actions candidate)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-action-transformer
+:END:
+
+Transform the initial list of ACTIONS associated with the CANDIDATE.
+@@html:<a name="func-literef-assoc">@@
+**** 7.7.a.2 literef-assoc(property a-list)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-assoc
+:END:
+
+Return the value in A-LIST (see [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html]]) associated with the PROPERTY of a candidate in =helm=. If no value is associated with the PROPERTY, return nil.
+@@html:<a name="func-literef-author-down">@@
+**** 7.7.a.3 literef-author-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-author-down
+:END:
+
+Compare the authors property of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-author-up">@@
+**** 7.7.a.4 literef-author-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-author-up
+:END:
+
+Compare the authors property of the candidates C1 and C2 using [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-candidate-helm-string">@@
+**** 7.7.a.5 literef-candidate-helm-string(c)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-candidate-helm-string
+:END:
+
+Compute the string to be displayed in helm for the candidate C.
+@@html:<a name="func-literef-candidate-property">@@
+**** 7.7.a.6 literef-candidate-property(property c)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-candidate-property
+:END:
+
+Return the PROPERTY of the candidate C or nil if the candidate does not have such a property.
+@@html:<a name="func-literef-candidate-transformer">@@
+**** 7.7.a.7 literef-candidate-transformer(candidates)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-candidate-transformer
+:END:
+
+Transform the initial candidate list given by CANDIDATES.
+@@html:<a name="func-literef-candidate-venue">@@
+**** 7.7.a.8 literef-candidate-venue(c)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-candidate-venue
+:END:
+
+Return the venue of the candidate C or nil of this property is not specified.
+@@html:<a name="func-literef-candidate-venue-type">@@
+**** 7.7.a.9 literef-candidate-venue-type(c)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-candidate-venue-type
+:END:
+
+Compute the venue type of the candidate C based on its key property.
+@@html:<a name="func-literef-char-to-compare">@@
+**** 7.7.a.10 literef-char-to-compare(char)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-char-to-compare
+:END:
+
+Return the comparison function symbol corresponding to CHAR, which is assumed to be one of the characters as in the variable [[#user-content-var-literef-citation-link-sorting-criteria][literef-citation-link-sorting-criteria]]. If CHAR is not one of those characters, then return nil.
+@@html:<a name="func-literef-compare">@@
+**** 7.7.a.11 literef-compare(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-compare
+:END:
+
+Compare the candidates C1 and C2 based on the value of the variable [[#user-content-var-literef-criteria][literef-criteria]].
+@@html:<a name="func-literef-criteria-list">@@
+**** 7.7.a.12 literef-criteria-list(chars)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-criteria-list
+:END:
+
+Compute the list of comparison functions from the list of characters CHARS as in the variable [[#user-content-var-literef-citation-link-sorting-criteria][literef-citation-link-sorting-criteria]].
+@@html:<a name="func-literef-filtered-candidate-transformer">@@
+**** 7.7.a.13 literef-filtered-candidate-transformer(_orig-fun candidates &optional _source)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-filtered-candidate-transformer
+:END:
+
+Transform the candidates list CANDIDATES by sorting.
+@@html:<a name="func-literef-helm-insert-action">@@
+**** 7.7.a.14 literef-helm-insert-action(_c)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-helm-insert-action
+:END:
+
+The insert-action of =helm=.
+@@html:<a name="func-literef-helm-marked-keys">@@
+**** 7.7.a.15 literef-helm-marked-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-helm-marked-keys
+:END:
+
+Computes the list of keys that are currently marked in =helm=.
+@@html:<a name="func-literef-key-down">@@
+**** 7.7.a.16 literef-key-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-down
+:END:
+
+Compare the key property of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-key-up">@@
+**** 7.7.a.17 literef-key-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-up
+:END:
+
+Compare the key property of the candidates C1 and C2 using [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-kill-ring-action-yank">@@
+**** 7.7.a.18 literef-kill-ring-action-yank(orig_fun _string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-kill-ring-action-yank
+:END:
+
+The LiteRef version of =helm-kill-ring-action-yank=, which performs intelligent yanking of keys.
+@@html:<a name="func-literef-read-sorting-criteria">@@
+**** 7.7.a.19 literef-read-sorting-criteria
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-read-sorting-criteria
+:END:
+
+Handle interactive input of the search criteria.
+@@html:<a name="func-literef-sort">@@
+**** 7.7.a.20 literef-sort(_orig-fun)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-sort
+:END:
+
+Sort the candidates.
+@@html:<a name="func-literef-str-compare">@@
+**** 7.7.a.21 literef-str-compare(c1 c2 property)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-str-compare
+:END:
+
+Compare the PROPERTY of the candidates C1 and C2. If the property is specified for both candidates, it is assumed to be of string type.
+@@html:<a name="func-literef-subgraph-helm">@@
+**** 7.7.a.22 literef-subgraph-helm
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-helm
+:END:
+
+The version of =org-ref-helm-cite=, in which the candidates are restricted to the selected subgraph.
+@@html:<a name="func-literef-timestamp-compare">@@
+**** 7.7.a.23 literef-timestamp-compare(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-timestamp-compare
+:END:
+
+Compare the candidates C1 and C2 based on timestamps of the corresponding entries in the papers database. Respect the value of the variable [[#user-content-var-literef-equal-timestamps][literef-equal-timestamps]] when deciding whether the two timestamps are equal.
+@@html:<a name="func-literef-timestamp-down">@@
+**** 7.7.a.24 literef-timestamp-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-timestamp-down
+:END:
+
+Compare timestamps of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-timestamp-compare][literef-timestamp-compare]].
+@@html:<a name="func-literef-timestamp-up">@@
+**** 7.7.a.25 literef-timestamp-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-timestamp-up
+:END:
+
+Compare timestamps of the candidates C1 and C2 using [[#user-content-func-literef-timestamp-compare][literef-timestamp-compare]].
+@@html:<a name="func-literef-title-down">@@
+**** 7.7.a.26 literef-title-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-title-down
+:END:
+
+Compare the title property of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-title-up">@@
+**** 7.7.a.27 literef-title-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-title-up
+:END:
+
+Compare the title property of the candidates C1 and C2 using [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-type-down">@@
+**** 7.7.a.28 literef-type-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-type-down
+:END:
+
+Compare the venue property of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-raw-str-compare][literef-raw-str-compare]].
+@@html:<a name="func-literef-type-up">@@
+**** 7.7.a.29 literef-type-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-type-up
+:END:
+
+Compare the venue type property of the candidates C1 and C2 using [[#user-content-func-literef-raw-str-compare][literef-raw-str-compare]].
+@@html:<a name="func-literef-venue-down">@@
+**** 7.7.a.30 literef-venue-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-venue-down
+:END:
+
+Compare the venue property of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-raw-str-compare][literef-raw-str-compare]].
+@@html:<a name="func-literef-venue-up">@@
+**** 7.7.a.31 literef-venue-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-venue-up
+:END:
+
+Compare the venue property of the candidates C1 and C2 using [[#user-content-func-literef-raw-str-compare][literef-raw-str-compare]].
+@@html:<a name="func-literef-year-down">@@
+**** 7.7.a.32 literef-year-down(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-year-down
+:END:
+
+Compare the year property of the candidates C1 and C2 using the inverse of [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="func-literef-year-up">@@
+**** 7.7.a.33 literef-year-up(c1 c2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-year-up
+:END:
+
+Compare the year property of the candidates C1 and C2 using [[#user-content-func-literef-str-compare][literef-str-compare]].
+@@html:<a name="vars-module-literef-helm">@@
+*** 7.7.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-helm
+:END:
+
+@@html:<a name="var-literef-criteria">@@
+**** 7.7.b.1 literef-criteria
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-criteria
+:END:
+
+The criteria for sorting candidates. See the variable [[#user-content-var-literef-citation-link-sorting-criteria][literef-citation-link-sorting-criteria]] for the possible values.
+@@html:<a name="module-literef-latex-map">@@
+** 7.8 Module literef-latex-map.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-latex-map
+:END:
+
+This module contains mappings for handling accented characters and functions for correctly displaying BibTeX entries containing such characters.
+@@html:<a name="funcs-module-literef-latex-map">@@
+*** 7.8.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-latex-map
+:END:
+
+@@html:<a name="func-literef-bibtex-completion-get-value">@@
+**** 7.8.a.1 literef-bibtex-completion-get-value(orig-fun &rest args)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-bibtex-completion-get-value
+:END:
+
+The version of =bibtex-completion-get-value= that maps accented characters. ARGS are simply forwarded to =bibtex-completion-get-value=.
+@@html:<a name="func-literef-translate-latex">@@
+**** 7.8.a.2 literef-translate-latex(str)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-translate-latex
+:END:
+
+Apply the mapping given by the value of the variable [[#user-content-var-literef-latex-map][literef-latex-map]] to translate escaped characters in the string STR.
+@@html:<a name="vars-module-literef-latex-map">@@
+*** 7.8.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-latex-map
+:END:
+
+@@html:<a name="var-literef-latex-full-map">@@
+**** 7.8.b.1 literef-latex-full-map
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-latex-full-map
+:END:
+
+This is a modified map from [[https://raw.githubusercontent.com/clarkgrubb/latex-input/master/latex.el]].
+@@html:<a name="var-literef-latex-map">@@
+**** 7.8.b.2 literef-latex-map
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-latex-map
+:END:
+
+The mapping to be used, must be either [[#user-content-func-literef-latex-full-map][literef-latex-full-map]] or [[#user-content-func-literef-latex-small-map][literef-latex-small-map]].
+@@html:<a name="var-literef-latex-small-map">@@
+**** 7.8.b.3 literef-latex-small-map
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-latex-small-map
+:END:
+
+A shorter version of the mapping contained in the variable [[#user-content-var-literef-latex-full-map][literef-latex-full-map]] used for performance considerations. It can be shortened further if needed. See [[https://stackoverflow.com/a/4580132/2725810]].
+@@html:<a name="module-literef-pdf">@@
+** 7.9 Module literef-pdf.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-pdf
+:END:
+
+This module contains the definition of the PDF annotation link. It provides functions for inserting such links into the researcher's notes and handling the operations associated with these links, including the translation of these links to page references during export. In addition, this module handles import of papers by letting the user select a region in the PDF, e.g. in the references section of a paper. Lastly, the module supports searching for keys whose PDF matches a search criteria and inserting those keys into the current notes buffer.
+@@html:<a name="funcs-module-literef-pdf">@@
+*** 7.9.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-pdf
+:END:
+
+@@html:<a name="func-literef-buffers-in-mode">@@
+**** 7.9.a.1 literef-buffers-in-mode(mode)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-buffers-in-mode
+:END:
+
+Compute the list of buffers that are currently in the major mode MODE.
+@@html:<a name="func-literef-cite-pdf-annotation">@@
+**** 7.9.a.2 literef-cite-pdf-annotation
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-cite-pdf-annotation
+:END:
+
+Let the user choose an annotation in an open PDF of a paper by
+clicking on the annotation. Inserts a PDF annotation link
+corresponding to the chosen annotation into the active notes
+buffer. Only PDFs open in the PDFView mode are handled.
+@@html:<a name="func-literef-first-word">@@
+**** 7.9.a.3 literef-first-word(line)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-first-word
+:END:
+
+Return the first word in the string LINE.
+@@html:<a name="func-literef-follow-pdf-annotation-link">@@
+**** 7.9.a.4 literef-follow-pdf-annotation-link(path)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-follow-pdf-annotation-link
+:END:
+
+Jump to the place in the PDF pointed to by PATH, which is the path component of a PDF annotation link.
+@@html:<a name="func-literef-get-region-bibtex">@@
+**** 7.9.a.5 literef-get-region-bibtex
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-get-region-bibtex
+:END:
+
+Search for a BibTeX entry in the online sources based on the
+selected region in the paper PDF.
+@@html:<a name="func-literef-glue-p">@@
+**** 7.9.a.6 literef-glue-p(line1-last line2-first)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-glue-p
+:END:
+
+Determine whether a line ending with the word LINE1-LAST and
+hyphen and the line beginning with the word LINE2-FIRST should be
+glued without the use of a hyphen when presenting those two lines as a
+single line. This involves trying to glue them without a hyphen and
+checking whether the resulting string is a word in the dictionary. If
+both glued and non-glued variants are correct or wrong, then the user
+is prompted to make a choice.
+@@html:<a name="func-literef-last-word-hyphen">@@
+**** 7.9.a.7 literef-last-word-hyphen(line)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-last-word-hyphen
+:END:
+
+Return the last word in the string LINE if it is followed by
+hyphen. If LINE is not ended with word and hyphen, return nil.
+@@html:<a name="func-literef-pdf-annotation-string">@@
+**** 7.9.a.8 literef-pdf-annotation-string(path &rest _args)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-pdf-annotation-string
+:END:
+
+Compute the page reference string that is to be substituted during exporting the
+survey for PDF annotation link with the path component PATH.
+@@html:<a name="func-literef-pdf-buffer-keys">@@
+**** 7.9.a.9 literef-pdf-buffer-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-pdf-buffer-keys
+:END:
+
+Return the list of keys, whose corresponding PDF is currently open
+in a buffer. This is done by looping through the open buffers and
+checking for each buffer currently in the PDFView mode whether it
+corresponds to an entry in the papers database.
+@@html:<a name="func-literef-search-pdfs">@@
+**** 7.9.a.10 literef-search-pdfs(string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-search-pdfs
+:END:
+
+Yank into the current notes buffer the citation links for the keys
+matched by searching for STRING in the first page of the PDFs in the
+papers database. LiteRef's intelligent yanking is used. The function
+relies on the =pdfgrep= shell command. The string STRING must be a
+valid search pattern for that command.
+@@html:<a name="func-literef-single-line-query">@@
+**** 7.9.a.11 literef-single-line-query(query)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-single-line-query
+:END:
+
+Compute a single-line query based on the possibly multi-line QUERY
+for searching for a BibTeX entry in the online sources, while
+correctly handling hyphen at the end of lines.
+@@html:<a name="vars-module-literef-pdf">@@
+*** 7.9.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-pdf
+:END:
+
+No variables are defined by this module.
+@@html:<a name="module-literef-server">@@
+** 7.10 Module literef-server.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-server
+:END:
+
+This module contains functions that handle communication with the Python server.
+@@html:<a name="funcs-module-literef-server">@@
+*** 7.10.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-server
+:END:
+
+@@html:<a name="func-literef-request-filename">@@
+**** 7.10.a.1 literef-request-filename
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-request-filename
+:END:
+
+Compute the name of the next request file.
+@@html:<a name="func-literef-server-request">@@
+**** 7.10.a.2 literef-server-request(type data)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-server-request
+:END:
+
+Submit request to the server. TYPE is either "getPdf" or "getBib". If it is "getPdf", then DATA is the key for which pdf is required. If it is "getBib", then DATA is the search query.
+@@html:<a name="vars-module-literef-server">@@
+*** 7.10.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-server
+:END:
+
+No variables are defined by this module.
+@@html:<a name="module-literef-subgraph">@@
+** 7.11 Module literef-subgraph.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-subgraph
+:END:
+
+This module handles the whole process of building the citation subgraph, beginning with specifying the source and the arc filter and culminating in the uniform-cost search that builds the subgraph. It also handles building the subgraphs for the source blocks inserted into the researcher's notes by the wizard. Lastly, it defines a minor mode for viewing the subgraph in a variety of formats.
+@@html:<a name="funcs-module-literef-subgraph">@@
+*** 7.11.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-subgraph
+:END:
+
+@@html:<a name="func-literef-add-to-next-iter">@@
+**** 7.11.a.1 literef-add-to-next-iter(from-key to-key-cons)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-add-to-next-iter
+:END:
+
+Handle the arc represented by FROM-KEY and TO-KEY-CONS (consisting
+of a key and a plist). If the arc fits the filter, then both the sink
+key (i.e. the car component of TO-KEY-CONS) and the corresponding
+generating arc are inserted in the current subgraph. If, in addition,
+the duplicate detection is passed, then add the sink key to the keys
+for the next iteration.
+@@html:<a name="func-literef-append-spaces">@@
+**** 7.11.a.2 literef-append-spaces(required-length)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-append-spaces
+:END:
+
+Append spaces to all lines in the current buffer, so they become at
+least the given REQUIRED-LENGTH long.
+@@html:<a name="func-literef-arc-filter-company-backend">@@
+**** 7.11.a.3 literef-arc-filter-company-backend(command &optional arg &rest ignored)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-arc-filter-company-backend
+:END:
+
+The company-mode back-end for entering the filter with completion
+for citation functions. The technique is described at
+[[http://sixty-north.com/blog/writing-the-simplest-emacs-company-mode-backend]].
+@@html:<a name="func-literef-arc-filter-minibuffer-mode">@@
+**** 7.11.a.4 literef-arc-filter-minibuffer-mode
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-arc-filter-minibuffer-mode
+:END:
+
+Turn on company mode.
+@@html:<a name="func-literef-arc-filter-p">@@
+**** 7.11.a.5 literef-arc-filter-p
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-arc-filter-p
+:END:
+
+NODOC
+@@html:<a name="func-literef-arc-filter-temp-variable">@@
+**** 7.11.a.6 literef-arc-filter-temp-variable(str)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-arc-filter-temp-variable
+:END:
+
+Return the symbol named literef-temp-<prefix>STR. The prefix is determined by the variable [[#user-content-var-literef-arc-filter-variables-prefix][literef-arc-filter-variables-prefix]].
+@@html:<a name="func-literef-arc-filter-variables">@@
+**** 7.11.a.7 literef-arc-filter-variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-arc-filter-variables
+:END:
+
+Return the list of variables recognized by the arc filter. Respects the variable [[#user-content-var-literef-arc-filter-variables-prefix][literef-arc-filter-variables-prefix]].
+@@html:<a name="func-literef-generating-arc-p">@@
+**** 7.11.a.8 literef-generating-arc-p(from-key to-key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-generating-arc-p
+:END:
+
+Return t if the arc from FROM-KEY to TO-KEY is a generating arc of the current subgraph and nil otherwise.
+@@html:<a name="func-literef-graph-check-arc">@@
+**** 7.11.a.9 literef-graph-check-arc(from-key to-key-cons)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-check-arc
+:END:
+
+Return t if the arc represented by FROM-KEY and TO-KEY-CONS (consisting of a key and a plist) fits the arc filter and nil otherwise.
+@@html:<a name="func-literef-graph-mode">@@
+**** 7.11.a.10 literef-graph-mode(&optional arg)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-mode
+:END:
+
+The definition of the minor mode for viewing the selected
+subgraph.
+@@html:<a name="func-literef-graph-scroll-down">@@
+**** 7.11.a.11 literef-graph-scroll-down
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-scroll-down
+:END:
+
+Handle scrolling down.
+@@html:<a name="func-literef-graph-scroll-left">@@
+**** 7.11.a.12 literef-graph-scroll-left
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-scroll-left
+:END:
+
+Handle scrolling left.
+@@html:<a name="func-literef-graph-scroll-right">@@
+**** 7.11.a.13 literef-graph-scroll-right
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-scroll-right
+:END:
+
+Handle scrolling right.
+@@html:<a name="func-literef-graph-scroll-up">@@
+**** 7.11.a.14 literef-graph-scroll-up
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-graph-scroll-up
+:END:
+
+Handle scrolling up.
+@@html:<a name="func-literef-init-subgraph">@@
+**** 7.11.a.15 literef-init-subgraph
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-init-subgraph
+:END:
+
+Make and return a new subgraph consisting of all the keys in the citation graph.
+@@html:<a name="func-literef-key-in-subgraph-p">@@
+**** 7.11.a.16 literef-key-in-subgraph-p(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-in-subgraph-p
+:END:
+
+Return t if KEY is in the current subgraph and nil otherwise.
+@@html:<a name="func-literef-list-satisfies-predicate-p">@@
+**** 7.11.a.17 literef-list-satisfies-predicate-p(predicate list)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-list-satisfies-predicate-p
+:END:
+
+Return t if the LIST of citation functions satisfies the PREDICATE
+and nil otherwise.
+@@html:<a name="func-literef-longest-line-length">@@
+**** 7.11.a.18 literef-longest-line-length
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-longest-line-length
+:END:
+
+Compute the length of the longest line in the current buffer.
+@@html:<a name="func-literef-make-arc-filter">@@
+**** 7.11.a.19 literef-make-arc-filter(str)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-make-arc-filter
+:END:
+
+Form and evaluate the function [[#user-content-func-literef-arc-filter-p][literef-arc-filter-p]] corresponding
+to the filter represented by the string STR.
+@@html:<a name="func-literef-neighbor-pairs">@@
+**** 7.11.a.20 literef-neighbor-pairs(direction cur-properties)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-neighbor-pairs
+:END:
+
+Compute the neighbors pairs consisting of key and properties that
+fit the required DIRECTION of the arc. The properties are computed
+based on CUR-PROPERTIES of the key being expanded. Properties include
+depth, direction and citation functions.
+@@html:<a name="func-literef-read-arc-filter">@@
+**** 7.11.a.21 literef-read-arc-filter(prompt)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-read-arc-filter
+:END:
+
+Read the string representing an arc filter, while providing
+completion of citation functions. The recognized citation functions
+are given by the value of the variable
+[[#user-content-func-literef-citation-functions][literef-citation-functions]]. Prompt the user with the string PROMPT.
+@@html:<a name="func-literef-select-subgraph">@@
+**** 7.11.a.22 literef-select-subgraph(&optional key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-select-subgraph
+:END:
+
+Select subgraph of the citation graph given by the variable
+[[#user-content-func-literef-graph][literef-graph]]. If KEY is specified, it is considered to be the
+currently active key to be used as the source. All the information
+needed for building the subgraph, such as the arc filter, is requested
+from the user.
+@@html:<a name="func-literef-select-subgraph-for-export">@@
+**** 7.11.a.23 literef-select-subgraph-for-export(key-or-file filter buffer-node-name)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-select-subgraph-for-export
+:END:
+
+Select subgraph of the citation graph given by the value of the variable [[#user-content-var-literef-graph][literef-graph]] for forming its visualization, with KEY-OR-FILE used as the source, FILTER used as the filter string and BUFFER-NODE-NAME used as the name of the buffer node in the visualization. In contrast to [[#user-content-func-literef-select-subgraph][literef-select-subgraph]], this function is non-interactive. It is to be called from a source block inserted into the survey by the wizard.
+@@html:<a name="func-literef-selected-subgraph-string">@@
+**** 7.11.a.24 literef-selected-subgraph-string(format)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-selected-subgraph-string
+:END:
+
+Return a string representation of the current subgraph in the given FORMAT. 
+
+For "txt" or "boxart" FORMAT, keys and labels are links. For non-clickable formats, such as "png", links are not used to save space. 
+
+The function respects the values of the variable [[#user-content-var-literef-subgraph-show-only-generating-arcs][literef-subgraph-show-only-generating-arcs]] and the variable [[#user-content-var-literef-subgraph-show-buffer][literef-subgraph-show-buffer]].
+@@html:<a name="func-literef-show-selected-subgraph">@@
+**** 7.11.a.25 literef-show-selected-subgraph
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-show-selected-subgraph
+:END:
+
+Visualize the selected subgraph. Respects [[#user-content-func-literef-subgraph-show-only-generating-arcs][literef-subgraph-show-only-generating-arcs]] and [[#user-content-func-literef-subgraph-show-buffer][literef-subgraph-show-buffer]].
+@@html:<a name="func-literef-show-selected-subgraph-png">@@
+**** 7.11.a.26 literef-show-selected-subgraph-png
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-show-selected-subgraph-png
+:END:
+
+Compute the visualization of the selected subgraph using the "png" format and show it in a buffer. Respects the
+  value of the variable [[#user-content-var-literef-subgraph-show-only-generating-arcs][literef-subgraph-show-only-generating-arcs]]
+  and the variable [[#user-content-var-literef-subgraph-show-buffer][literef-subgraph-show-buffer]].
+@@html:<a name="func-literef-show-selected-subgraph-raw">@@
+**** 7.11.a.27 literef-show-selected-subgraph-raw(format)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-show-selected-subgraph-raw
+:END:
+
+Compute the visualization of the selected subgraph using FORMAT,
+  such as "boxart" or "png" and show it in a buffer. Respects the
+  value of the variable [[#user-content-var-literef-subgraph-show-only-generating-arcs][literef-subgraph-show-only-generating-arcs]]
+  and the variable [[#user-content-var-literef-subgraph-show-buffer][literef-subgraph-show-buffer]].
+@@html:<a name="func-literef-subgraph-add-generating-arc">@@
+**** 7.11.a.28 literef-subgraph-add-generating-arc(from-key to-key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-add-generating-arc
+:END:
+
+Add a generating arc from FROM-KEY to TO-KEY to the current subgraph.
+@@html:<a name="func-literef-subgraph-add-key">@@
+**** 7.11.a.29 literef-subgraph-add-key(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-add-key
+:END:
+
+Add KEY to the current-subgraph.
+@@html:<a name="func-literef-subgraph-build-from-source">@@
+**** 7.11.a.30 literef-subgraph-build-from-source
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-build-from-source
+:END:
+
+Build the current subgraph based on its source. If the source type is =:buffer=, assumes that the source buffer is currently active.
+@@html:<a name="func-literef-subgraph-compute-initial-keys">@@
+**** 7.11.a.31 literef-subgraph-compute-initial-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-compute-initial-keys
+:END:
+
+Compute the list of keys for forming the subgraph. All the keys
+cited in the source are used. If the source is a buffer, it is assumed
+to be currently active.
+@@html:<a name="func-literef-subgraph-generating-arcs">@@
+**** 7.11.a.32 literef-subgraph-generating-arcs
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-generating-arcs
+:END:
+
+Return the generating arcs component of the current subgraph.
+@@html:<a name="func-literef-subgraph-initial-keys">@@
+**** 7.11.a.33 literef-subgraph-initial-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-initial-keys
+:END:
+
+Return the initial keys component of the current subgraph.
+@@html:<a name="func-literef-subgraph-keys">@@
+**** 7.11.a.34 literef-subgraph-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-keys
+:END:
+
+Return the keys component of the current subgraph.
+@@html:<a name="func-literef-subgraph-reset-selection">@@
+**** 7.11.a.35 literef-subgraph-reset-selection
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-reset-selection
+:END:
+
+Reset the subgraph selection to be the entire citation graph.
+@@html:<a name="func-literef-subgraph-save-image">@@
+**** 7.11.a.36 literef-subgraph-save-image(format)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-save-image
+:END:
+
+Save the visualization of the selected subgraph using FORMAT, such as "boxart" or "png" in a temporary file and return the file's name. Respects the values of the variable [[#user-content-var-literef-subgraph-show-only-generating-arcs][literef-subgraph-show-only-generating-arcs]] and the variable [[#user-content-var-literef-subgraph-show-buffer][literef-subgraph-show-buffer]].
+@@html:<a name="func-literef-subgraph-select-source">@@
+**** 7.11.a.37 literef-subgraph-select-source(&optional key file-name)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-select-source
+:END:
+
+Compute the source for forming the current subgraph based on the optional arguments, as follows. 
+
+1. If KEY is specified, it becomes the source. Otherwise,
+
+2. If some key is currently active, it becomes the source. Otherwise,
+
+3. If FILE is specified and the file exists, it becomes the source. Otherwise,
+
+4. The file returned by =buffer-file-name= becomes the source.
+@@html:<a name="func-literef-subgraph-set-initial-keys">@@
+**** 7.11.a.38 literef-subgraph-set-initial-keys(keys)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-set-initial-keys
+:END:
+
+Set the initial keys component of the current subgraph to KEYS.
+@@html:<a name="func-literef-subgraph-set-source-property">@@
+**** 7.11.a.39 literef-subgraph-set-source-property(property value)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-set-source-property
+:END:
+
+Set the property PROPERTY of the source of current subgraph to VALUE.
+@@html:<a name="func-literef-subgraph-source">@@
+**** 7.11.a.40 literef-subgraph-source
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-source
+:END:
+
+Return the source component of the current subgraph.
+@@html:<a name="func-literef-subgraph-source-property">@@
+**** 7.11.a.41 literef-subgraph-source-property(property)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-subgraph-source-property
+:END:
+
+Return the value of the property PROPERTY of the source of current subgraph.
+@@html:<a name="func-literef-uniform-cost-search">@@
+**** 7.11.a.42 literef-uniform-cost-search(initial-keys)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-uniform-cost-search
+:END:
+
+Build the current subgraph by performing uniform-cost search from
+INITIAL-KEYS while respecting the current arc filter. The search keeps
+direction. That is, if the current key was reached by following an
+outgoing arc, then only the out-neighbors of that key will be
+considered for the next iteration.
+@@html:<a name="vars-module-literef-subgraph">@@
+*** 7.11.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-subgraph
+:END:
+
+@@html:<a name="var-literef-graph-mode">@@
+**** 7.11.b.1 literef-graph-mode
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-graph-mode
+:END:
+
+Non-nil if Literef-Graph mode is enabled.
+Use the command [[#user-content-func-literef-graph-mode][literef-graph-mode]] to change this variable.
+@@html:<a name="var-literef-graph-mode-hook">@@
+**** 7.11.b.2 literef-graph-mode-hook
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-graph-mode-hook
+:END:
+
+Hook run after entering or leaving [[#user-content-func-literef-graph-mode][literef-graph-mode]].
+No problems result if this variable is not bound.
+=add-hook= automatically binds it.  (This is true for all hook variables.)
+@@html:<a name="var-literef-graph-mode-map">@@
+**** 7.11.b.3 literef-graph-mode-map
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-graph-mode-map
+:END:
+
+The key map for the minor mode for viewing the selected subgraph [[#user-content-func-literef-graph-mode][literef-graph-mode]].
+@@html:<a name="var-literef-subgraph">@@
+**** 7.11.b.4 literef-subgraph
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-subgraph
+:END:
+
+The selected subgraph with the following components: 
+
+:keys -- the hash of keys in the subgraph.
+
+:initial-keys -- the list of keys, which served as the root of the uniform-cost search that built the subgraph.
+
+:generating-arcs -- the arcs that were traversed by the uniform-cost search that built the subgraph.
+
+:source -- the source, based on which the subgraph was constructed. The source consists of:
+
+    - :source-type -- the type of the source for building the graph. This can be =:all-keys=, =:key= or =:buffer=.
+
+    - :source-name -- the name of key or buffer.
+
+    - :buffer-node-name -- the name to be used for the node corresponding to the buffer source in the visualization.
+
+    - :file-name -- the file which the source buffer was visiting at the time of building the subgraph.
+
+    - :filter-string -- the arcs filter that was used to construct the graph.
+@@html:<a name="module-literef-util-links">@@
+** 7.12 Module literef-util-links.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-util-links
+:END:
+
+This module contains some helper functions to make working with links in the other modules convenient.
+@@html:<a name="funcs-module-literef-util-links">@@
+*** 7.12.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-util-links
+:END:
+
+@@html:<a name="func-literef-all-links">@@
+**** 7.12.a.1 literef-all-links(predicate)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-all-links
+:END:
+
+Compute the list of all links in the current buffer that satisfy a
+given PREDICATE (if PREDICATE is nil, all links are included). The
+links are sorted by their begin positions. The =:end= property is
+substituted to be the actual end point of the link without spaces
+after it.
+@@html:<a name="func-literef-citation-function-link-p">@@
+**** 7.12.a.2 literef-citation-function-link-p(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-function-link-p
+:END:
+
+Return t if the LINK is a citation function link and nil otherwise.
+@@html:<a name="func-literef-citation-function-links">@@
+**** 7.12.a.3 literef-citation-function-links
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-function-links
+:END:
+
+Compute the list of all citation function links in the current buffer, sorted by the begin position.
+@@html:<a name="func-literef-citation-link-p">@@
+**** 7.12.a.4 literef-citation-link-p(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-link-p
+:END:
+
+Return t if the LINK is a citation link and nil otherwise.
+@@html:<a name="func-literef-citation-link-under-cursor">@@
+**** 7.12.a.5 literef-citation-link-under-cursor
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-link-under-cursor
+:END:
+
+Return the citation link at point. If the cursor is not over a
+citation link, return nil.
+@@html:<a name="func-literef-citation-links">@@
+**** 7.12.a.6 literef-citation-links
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-citation-links
+:END:
+
+Compute the list of all citation links in the current buffer, sorted by their begin positions.
+@@html:<a name="func-literef-first-citation-link-on-line">@@
+**** 7.12.a.7 literef-first-citation-link-on-line
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-first-citation-link-on-line
+:END:
+
+Return the first citation link on the current line. If there is no citation link on the line, return nil.
+@@html:<a name="func-literef-link-begin">@@
+**** 7.12.a.8 literef-link-begin(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-begin
+:END:
+
+The beginning point of the LINK.
+@@html:<a name="func-literef-link-end">@@
+**** 7.12.a.9 literef-link-end(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-end
+:END:
+
+The end point of the LINK. The spaces following the link are not included.
+@@html:<a name="func-literef-link-path">@@
+**** 7.12.a.10 literef-link-path(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-path
+:END:
+
+Return the path component of the LINK.
+@@html:<a name="func-literef-link-path-components">@@
+**** 7.12.a.11 literef-link-path-components(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-path-components
+:END:
+
+Extract keys from the LINK's path component.
+@@html:<a name="func-literef-link-prev-element">@@
+**** 7.12.a.12 literef-link-prev-element(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-prev-element
+:END:
+
+The org-element adjacent and before the LINK.
+@@html:<a name="func-literef-link-prev-non-space">@@
+**** 7.12.a.13 literef-link-prev-non-space(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-prev-non-space
+:END:
+
+Return the position of the first non-blank character before the LINK.
+@@html:<a name="func-literef-link-type">@@
+**** 7.12.a.14 literef-link-type(link)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-type
+:END:
+
+Return the type of the LINK.
+@@html:<a name="func-literef-link-less">@@
+**** 7.12.a.15 literef-link<(link1 link2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-link-less
+:END:
+
+Determine which of the links LINK1 and LINK2 appears earlier in the buffer. The two links are assumed to appear in the same buffer. Return t if LINK1 appears before LINK2 and nil otherwise.
+@@html:<a name="vars-module-literef-util-links">@@
+*** 7.12.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-util-links
+:END:
+
+No variables are defined by this module.
+@@html:<a name="module-literef-utils">@@
+** 7.13 Module literef-utils.el
+:PROPERTIES:
+:CUSTOM_ID: user-content-module-literef-utils
+:END:
+
+This module contains some helper functions. Some of these, such as [[#user-content-func-literef-xor][literef-xor]], are not related to LiteRef functionalities per se and can be used by other projects. Others, such as [[#user-content-func-literef-bib-files][literef-bib-files]] are LiteRef-specific, but are used by many modules and hence are separated out as utilities.
+@@html:<a name="funcs-module-literef-utils">@@
+*** 7.13.a Functions
+:PROPERTIES:
+:CUSTOM_ID: user-content-funcs-module-literef-utils
+:END:
+
+@@html:<a name="func-literef-all-keys">@@
+**** 7.13.a.1 literef-all-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-all-keys
+:END:
+
+Compute the list of all keys in the papers database.
+@@html:<a name="func-literef-bib-filename">@@
+**** 7.13.a.2 literef-bib-filename(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-bib-filename
+:END:
+
+Compute the name of the BibTeX file based on KEY.
+@@html:<a name="func-literef-bib-files">@@
+**** 7.13.a.3 literef-bib-files(&optional _arg)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-bib-files
+:END:
+
+Compute the list of BibTeX files in the papers database.
+@@html:<a name="func-literef-buffer-key">@@
+**** 7.13.a.4 literef-buffer-key(buffer)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-buffer-key
+:END:
+
+Compute key based on the BUFFER visiting a file associated with a paper. If the buffer is not visiting a file associated with a paper, return nil.
+@@html:<a name="func-literef-buffer-keys">@@
+**** 7.13.a.5 literef-buffer-keys
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-buffer-keys
+:END:
+
+Compute the list of all keys cited in the current buffer, sorted and with duplicates removed.
+@@html:<a name="func-literef-check-arrived-pdfs">@@
+**** 7.13.a.6 literef-check-arrived-pdfs
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-check-arrived-pdfs
+:END:
+
+Open PDFs for the keys contained in the list given by the value of the variable [[#user-content-var-literef-needed-pdfs][literef-needed-pdfs]].
+@@html:<a name="func-literef-creation-timestamp">@@
+**** 7.13.a.7 literef-creation-timestamp(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-creation-timestamp
+:END:
+
+Compute the creation timestamp of the database entry corresponding to KEY as a floating-point number of seconds. We use the modification timestamp of the BibTeX file, since, in general, the creation timestamp might not be stored by the operating system and accessing the creation date for ext4 is not trivial.
+@@html:<a name="func-literef-current-buffer-key">@@
+**** 7.13.a.8 literef-current-buffer-key
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-current-buffer-key
+:END:
+
+Compute key of the paper whose associated file is being visited by
+the current buffer. If the current buffer is not visiting a file
+associated with a paper, return nil.
+@@html:<a name="func-literef-current-key">@@
+**** 7.13.a.9 literef-current-key
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-current-key
+:END:
+
+Return the key at point. If there is no key under the cursor, then return the key whose associated file is being visited by the current buffer. If the current buffer is not visiting a file associated with a paper, return nil.
+@@html:<a name="func-literef-eval-string">@@
+**** 7.13.a.10 literef-eval-string(string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-eval-string
+:END:
+
+Evaluate Emacs Lisp code given by STRING. The code is taken from [[https://emacs.stackexchange.com/a/19878/16048]].
+@@html:<a name="func-literef-file-key">@@
+**** 7.13.a.11 literef-file-key(filename)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-file-key
+:END:
+
+Compute key based on the name FILENAME of one of the files associated with a paper. If the file is not associated with a paper, return nil.
+@@html:<a name="func-literef-filename">@@
+**** 7.13.a.12 literef-filename(key ext)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-filename
+:END:
+
+Compute the name of a file with the extension EXT pertaining to a paper whose BibTeX entry's key is KEY. Note that this file does not need to exist.
+@@html:<a name="func-literef-find-file-other-window">@@
+**** 7.13.a.13 literef-find-file-other-window(filename)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-find-file-other-window
+:END:
+
+The version of =find-file-other-window= that does not do anything if the file is already being visited in the current window.
+@@html:<a name="func-literef-folder-key">@@
+**** 7.13.a.14 literef-folder-key(folder)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-folder-key
+:END:
+
+Compute key based on a paper's FOLDER in the papers database. If FOLDER does not correspond to a paper, return nil.
+@@html:<a name="func-literef-get-bibtex-key-under-cursor">@@
+**** 7.13.a.15 literef-get-bibtex-key-under-cursor
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-get-bibtex-key-under-cursor
+:END:
+
+Non-throwing version of =org-ref-get-bibtex-key-under-cursor=. This version does not affect the current point in the buffer.
+@@html:<a name="func-literef-get-entry">@@
+**** 7.13.a.16 literef-get-entry(orig-fun &rest args)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-get-entry
+:END:
+
+The version of =bibtex-completion-get-entry1= with the only source set to the bib file corresponding to the given key, which is the entry-key argument contained in ARGS.
+@@html:<a name="func-literef-hash-empty-p">@@
+**** 7.13.a.17 literef-hash-empty-p(hash)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-hash-empty-p
+:END:
+
+Return t if HASH is empty and nil otherwise.
+@@html:<a name="func-literef-hash-keys-minus">@@
+**** 7.13.a.18 literef-hash-keys-minus(hash1 hash2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-hash-keys-minus
+:END:
+
+Return a list of keys that are present in HASH1, but not in HASH2.
+@@html:<a name="func-literef-hash-keys-to-list">@@
+**** 7.13.a.19 literef-hash-keys-to-list(hash)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-hash-keys-to-list
+:END:
+
+Return a list of keys in HASH.
+@@html:<a name="func-literef-hash-pairs-to-list">@@
+**** 7.13.a.20 literef-hash-pairs-to-list(hash)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-hash-pairs-to-list
+:END:
+
+Return a list of key-value pairs in HASH.
+@@html:<a name="func-literef-join-strings">@@
+**** 7.13.a.21 literef-join-strings(strings separator)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-join-strings
+:END:
+
+Join the list STRINGS of strings putting the SEPARATOR string between them.
+@@html:<a name="func-literef-key-exists">@@
+**** 7.13.a.22 literef-key-exists(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-key-exists
+:END:
+
+Return t if KEY exists and nil otherwise.
+@@html:<a name="func-literef-notes-filename">@@
+**** 7.13.a.23 literef-notes-filename(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-notes-filename
+:END:
+
+Compute name of the notes file based on KEY.
+@@html:<a name="func-literef-number-or-nil">@@
+**** 7.13.a.24 literef-number-or-nil(string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-number-or-nil
+:END:
+
+Convert STRING to number. Return nil if STRING does not represent a number.
+@@html:<a name="func-literef-number-or-nil-p">@@
+**** 7.13.a.25 literef-number-or-nil-p(string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-number-or-nil-p
+:END:
+
+Return t if STRING represents a number and nil otherwise.
+@@html:<a name="func-literef-open-bibfile">@@
+**** 7.13.a.26 literef-open-bibfile
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-bibfile
+:END:
+
+Open the BibTeX file for the current key. See [[#user-content-func-literef-current-key][literef-current-key]].
+@@html:<a name="func-literef-open-key-bibfile">@@
+**** 7.13.a.27 literef-open-key-bibfile(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-key-bibfile
+:END:
+
+Open the BibTeX file for KEY.
+@@html:<a name="func-literef-open-key-notes">@@
+**** 7.13.a.28 literef-open-key-notes(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-key-notes
+:END:
+
+Open the researcher's notes for KEY.
+@@html:<a name="func-literef-open-key-pdf">@@
+**** 7.13.a.29 literef-open-key-pdf(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-key-pdf
+:END:
+
+Open the PDF for KEY.
+@@html:<a name="func-literef-open-key-pdf-raw">@@
+**** 7.13.a.30 literef-open-key-pdf-raw(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-key-pdf-raw
+:END:
+
+Open the PDF for KEY. This function should not be used directly.
+@@html:<a name="func-literef-open-notes">@@
+**** 7.13.a.31 literef-open-notes
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-notes
+:END:
+
+Open the researcher's notes for the current key. See [[#user-content-func-literef-current-key][literef-current-key]].
+@@html:<a name="func-literef-open-pdf">@@
+**** 7.13.a.32 literef-open-pdf
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-open-pdf
+:END:
+
+Open the PDF for the current key. See [[#user-content-func-literef-current-key][literef-current-key]].
+@@html:<a name="func-literef-pdf-filename">@@
+**** 7.13.a.33 literef-pdf-filename(key)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-pdf-filename
+:END:
+
+Compute name of the PDF file based on KEY.
+@@html:<a name="func-literef-plist-put">@@
+**** 7.13.a.34 literef-plist-put(plist prop val)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-plist-put
+:END:
+
+Just a shortcut for =(setq plist (plist-put PLIST PROP VAL)).=
+@@html:<a name="func-literef-raw-str-compare">@@
+**** 7.13.a.35 literef-raw-str-compare(s1 s2)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-raw-str-compare
+:END:
+
+Compare strings S1 and S2. Return -1 if S1 is smaller than S2, 1 if S2 is smaller than S1 and 0 if the strings are equal.
+@@html:<a name="func-literef-read-char">@@
+**** 7.13.a.36 literef-read-char(prompt legal-chars)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-read-char
+:END:
+
+Read a char until one of the chars in LEGAL-CHARS is entered. Return the last read char. Prompt the user with PROMPT.
+@@html:<a name="func-literef-read-number-or-nil">@@
+**** 7.13.a.37 literef-read-number-or-nil(prompt default)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-read-number-or-nil
+:END:
+
+Read either a number or "nil" from the user and return it.
+@@html:<a name="func-literef-replace-in-string-whole-words">@@
+**** 7.13.a.38 literef-replace-in-string-whole-words(what with in)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-replace-in-string-whole-words
+:END:
+
+Like =replace-in-string=, but replaces whole words. The code is taken from [[https://emacs.stackexchange.com/a/34665/16048]].
+@@html:<a name="func-literef-set-default-bibliography">@@
+**** 7.13.a.39 literef-set-default-bibliography(&optional _orig-fun)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-set-default-bibliography
+:END:
+
+Set =org-ref-default-bibliography= to be the list of all the BibTeX files in the papers database.
+@@html:<a name="func-literef-string-or-nil-to-string">@@
+**** 7.13.a.40 literef-string-or-nil-to-string(string)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-string-or-nil-to-string
+:END:
+
+If STRING is nil, return "nil", otherwise return STRING.
+@@html:<a name="func-literef-word-correct-p">@@
+**** 7.13.a.41 literef-word-correct-p(word)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-word-correct-p
+:END:
+
+Return t if WORD is spelled correctly and nil otherwise. Adapted from =flyspell-correct-word-before-point=.
+@@html:<a name="func-literef-xor">@@
+**** 7.13.a.42 literef-xor(a b)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-literef-xor
+:END:
+
+Compute A xor B.
+@@html:<a name="func-replace-in-string">@@
+**** 7.13.a.43 replace-in-string(what with in)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-replace-in-string
+:END:
+
+Replace each occurrence of WHAT in the string IN with WITH. The code is taken from [[https://stackoverflow.com/a/17325791/2725810]].
+@@html:<a name="func-with-cloned-buffer">@@
+**** 7.13.a.44 with-cloned-buffer(&rest body)
+:PROPERTIES:
+:CUSTOM_ID: user-content-func-with-cloned-buffer
+:END:
+
+Executes BODY just like =progn= but maintain the original buffer state. The code is taken from [[https://emacs.stackexchange.com/a/31763/16048]].
+@@html:<a name="vars-module-literef-utils">@@
+*** 7.13.b Variables
+:PROPERTIES:
+:CUSTOM_ID: user-content-vars-module-literef-utils
+:END:
+
+@@html:<a name="var-literef-needed-pdfs">@@
+**** 7.13.b.1 literef-needed-pdfs
+:PROPERTIES:
+:CUSTOM_ID: user-content-var-literef-needed-pdfs
+:END:
+
+Keys whose PDFs are currently being searched for in the online sources.
+
+@@html:<a name="config">@@
+** 7.14 The server
+Please follow [[http://homedir.jct.ac.il/~mgoldenb/literef_server/index.html][this link]] to the documentation of the server API.
+:PROPERTIES:
+:CUSTOM_ID: user-content-config
+:END:

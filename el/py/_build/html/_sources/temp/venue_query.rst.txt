@@ -1,0 +1,7 @@
+venue\_query module
+===================
+
+.. automodule:: venue_query
+    :members:
+    :undoc-members:
+    :show-inheritance:

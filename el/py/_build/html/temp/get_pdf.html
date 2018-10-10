@@ -1,0 +1,359 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>get_pdf module &#8212; LiteRef Server 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LiteRef Server 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-get_pdf">
+<span id="get-pdf-module"></span><h1>get_pdf module<a class="headerlink" href="#module-get_pdf" title="Permalink to this headline">¶</a></h1>
+<p>This module handles searching for PDF of a paper in the online sources given by the value of the variables <a class="reference internal" href="config.html#config.PDF_AUTOMATED_SOURCES" title="config.PDF_AUTOMATED_SOURCES"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config.PDF_AUTOMATED_SOURCES</span></code></a> and <a class="reference internal" href="config.html#config.BIB_AUTOMATED_SOURCES" title="config.BIB_AUTOMATED_SOURCES"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config.BIB_AUTOMATED_SOURCES</span></code></a>.</p>
+<dl class="function">
+<dt id="get_pdf.candidateBibFeedback">
+<code class="descclassname">get_pdf.</code><code class="descname">candidateBibFeedback</code><span class="sig-paren">(</span><em>link</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.candidateBibFeedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the found candidate BibTeX entry and ask the user whether
+it is the one he desired.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>link</strong> – The direct link to the BibTeX entry.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Source:</th><td class="field-body">The online source.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reply of the user (yes/no).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.candidatePDFFeedback">
+<code class="descclassname">get_pdf.</code><code class="descname">candidatePDFFeedback</code><span class="sig-paren">(</span><em>link</em>, <em>paperDir</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.candidatePDFFeedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the found candidate PDF and ask the user whether it is
+the one he desired.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>link</strong> – The direct link to the PDF.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">PaperDir:</th><td class="field-body">The folder of the paper whose PDF is requested.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reply of the user (yes/no).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.confirmPDF">
+<code class="descclassname">get_pdf.</code><code class="descname">confirmPDF</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.confirmPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the given PDF and ask the user whether is the one he wanted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the PDF file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The yes/no answer of the user.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.entry2query">
+<code class="descclassname">get_pdf.</code><code class="descname">entry2query</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.entry2query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a search query based on the given BibTeX entry or search
+string. If a BibTeX entry is supplied, then extract only the
+title. In both cases, replace spaces by pluses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>entry</strong> – BibTeX entry or search string.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The computed search query.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.firstLink">
+<code class="descclassname">get_pdf.</code><code class="descname">firstLink</code><span class="sig-paren">(</span><em>source</em>, <em>searchType</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.firstLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first link to the resource corresponding to the given
+search type (PDF of BibTeX) from the given HTML source page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> – The online source.</li>
+<li><strong>searchType</strong> – The search type (“pdf” or “bib”).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The first link to the resource being searched     for. Returns an empty string if the <code class="docutils literal notranslate"><span class="pre">afterLinkForPDF</span></code> (or     <code class="docutils literal notranslate"><span class="pre">afterLinkForBib</span></code>) method of the source (see the documentation     of the <a class="reference internal" href="online_sources.html#module-online_sources" title="online_sources"><code class="xref py py-mod docutils literal notranslate"><span class="pre">online_sources</span></code></a> module) raises an     exception. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> If the link is not found on the page.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.followRedirections">
+<code class="descclassname">get_pdf.</code><code class="descname">followRedirections</code><span class="sig-paren">(</span><em>source</em>, <em>searchType</em>, <em>link</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.followRedirections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Follow <code class="docutils literal notranslate"><span class="pre">http</span></code> re-directions beginning from the given <em>link</em>
+until a direct link to the searched for resource is
+obtained. Different sources and search types are handled
+appropriately.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> – The online source.</li>
+<li><strong>searchType</strong> – The search type (“pdf” or “bib”).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The direct link to the searched for resource.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.getResourceAutomated">
+<code class="descclassname">get_pdf.</code><code class="descname">getResourceAutomated</code><span class="sig-paren">(</span><em>entry</em>, <em>searchType</em>, <em>paperDir</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.getResourceAutomated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for the requested resource in the online sources given by
+the value of <a class="reference internal" href="config.html#config.PDF_AUTOMATED_SOURCES" title="config.PDF_AUTOMATED_SOURCES"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config.PDF_AUTOMATED_SOURCES</span></code></a> or
+<a class="reference internal" href="config.html#config.BIB_AUTOMATED_SOURCES" title="config.BIB_AUTOMATED_SOURCES"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config.BIB_AUTOMATED_SOURCES</span></code></a> depending on the search
+type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>entry</strong> – The paper’s BibTeX entry. This argument is provided     for consistency of interface, but is not actually used.</li>
+<li><strong>searchType</strong> – The search type (“pdf” or “bib”).</li>
+<li><strong>paperDir</strong> – The folder containing the files associated with     the paper.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the user confirmed the found resource and     <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.getResourceManual">
+<code class="descclassname">get_pdf.</code><code class="descname">getResourceManual</code><span class="sig-paren">(</span><em>entry</em>, <em>searchType</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.getResourceManual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain the resource for the entry in a manual manner from the
+online source given by the value of
+<a class="reference internal" href="config.html#config.PDF_MANUAL_SOURCE" title="config.PDF_MANUAL_SOURCE"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config.PDF_MANUAL_SOURCE</span></code></a> or
+<a class="reference internal" href="config.html#config.BIB_MANUAL_SOURCE" title="config.BIB_MANUAL_SOURCE"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config.BIB_MANUAL_SOURCE</span></code></a> depending on the search type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>entry</strong> – The paper’s BibTeX entry. This argument is provided     for consistency of interface, but is not actually used.</li>
+<li><strong>searchType</strong> – The search type (“pdf” or “bib”).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.pdfExists">
+<code class="descclassname">get_pdf.</code><code class="descname">pdfExists</code><span class="sig-paren">(</span><em>entry</em>, <em>paperDir</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.pdfExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the needed PDF file is among the PDF files in the
+drop folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>entry</strong> – The paper’s BibTeX entry. This argument is provided     for consistency of interface, but is not actually used.</li>
+<li><strong>paperDir</strong> – The folder containing the files associated with     the paper.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the paper PDF exists and <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.processCandidateBib">
+<code class="descclassname">get_pdf.</code><code class="descname">processCandidateBib</code><span class="sig-paren">(</span><em>link</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.processCandidateBib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the found candidate PDF and ask the user whether it is
+the one he desired. If the user confirms, then add the PDF into
+the papers database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>link</strong> – The direct link to the BibTeX entry.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Source:</th><td class="field-body">The online source.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reply of the user to the confirmation request     (yes/no).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.processCandidatePDF">
+<code class="descclassname">get_pdf.</code><code class="descname">processCandidatePDF</code><span class="sig-paren">(</span><em>link</em>, <em>paperDir</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.processCandidatePDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the found candidate PDF and ask the user whether it is
+the one he desired. If the user confirms, then add the PDF into
+the papers database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>link</strong> – The direct link to the PDF.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">PaperDir:</th><td class="field-body">The folder of the paper whose PDF is requested.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The reply of the user to the confirmation request     (yes/no).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.sourceQueryAddress">
+<code class="descclassname">get_pdf.</code><code class="descname">sourceQueryAddress</code><span class="sig-paren">(</span><em>source</em>, <em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.sourceQueryAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the web address containing the query for the given search entry and source.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> – The online source.</li>
+<li><strong>entry</strong> – BibTeX entry or search string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The computed web address.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_pdf.sourceSearchResultsHTML">
+<code class="descclassname">get_pdf.</code><code class="descname">sourceSearchResultsHTML</code><span class="sig-paren">(</span><em>source</em>, <em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#get_pdf.sourceSearchResultsHTML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the string HTML source of the page of search results.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> – The online source.</li>
+<li><strong>entry</strong> – BibTeX entry or search string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The contents of the HTML page containing the search     results.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/temp/get_pdf.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LiteRef Server 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Meir Goldenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

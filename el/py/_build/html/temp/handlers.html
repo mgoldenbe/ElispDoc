@@ -1,0 +1,388 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>handlers module &#8212; LiteRef Server 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LiteRef Server 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-handlers">
+<span id="handlers-module"></span><h1>handlers module<a class="headerlink" href="#module-handlers" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functions for handling the events in the drop
+folder. These events concern appearance of new files as a result of
+manual import, automated search in the online sourrces or a request
+created by the command layer.</p>
+<dl class="class">
+<dt id="handlers.Modes">
+<em class="property">class </em><code class="descclassname">handlers.</code><code class="descname">Modes</code><a class="headerlink" href="#handlers.Modes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flufl.enum._enum.Enum</span></code></p>
+<p>The possible modes for duplicated detection.</p>
+<dl class="attribute">
+<dt id="handlers.Modes.PERSIST_CREATE">
+<code class="descname">PERSIST_CREATE</code><em class="property"> = &lt;EnumValue: Modes.PERSIST_CREATE [value=2]&gt;</em><a class="headerlink" href="#handlers.Modes.PERSIST_CREATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whenever a duplicate key is detected, add a letter to the key to
+make it unique and add an entry to the papers database.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="handlers.Modes.PERSIST_SKIP">
+<code class="descname">PERSIST_SKIP</code><em class="property"> = &lt;EnumValue: Modes.PERSIST_SKIP [value=1]&gt;</em><a class="headerlink" href="#handlers.Modes.PERSIST_SKIP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip all duplicate keys.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="handlers.Modes.REGULAR">
+<code class="descname">REGULAR</code><em class="property"> = &lt;EnumValue: Modes.REGULAR [value=0]&gt;</em><a class="headerlink" href="#handlers.Modes.REGULAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inform the user that the key already exists and ask him what he would like to do.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.abbreviateWord">
+<code class="descclassname">handlers.</code><code class="descname">abbreviateWord</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.abbreviateWord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abbreviate the given word.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>word</strong> – The word to be abbreviated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The abbreviated word.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.confirmKey">
+<code class="descclassname">handlers.</code><code class="descname">confirmKey</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.confirmKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Confirm with the user that the downloaded PDF is the desired PDF
+for the given key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – The BibTeX key of the paper for which a PDF is needed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The reply of the user (yes/no).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.duplicateCheck">
+<code class="descclassname">handlers.</code><code class="descname">duplicateCheck</code><span class="sig-paren">(</span><em>key</em>, <em>mode</em>, <em>askPersist</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.duplicateCheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether an entry with the given BibTeX key exists in the
+papers database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> – The BibTeX key to be checked for duplicates.</li>
+<li><strong>mode</strong> – One of the modes listed by the <a class="reference internal" href="#handlers.Modes" title="handlers.Modes"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Modes</span></code></a> variable.</li>
+<li><strong>askPersist</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, ask whether the current choice of     the user should be assumed for all subsequent duplicates.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple consisting of the added key and the mode. If the     key is not added, then first member of the returned tuple is     ‘BadKey’.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.handleNewBib">
+<code class="descclassname">handlers.</code><code class="descname">handleNewBib</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.handleNewBib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a BibTeX file that has just appeared in the drop folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the new BibTeX file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.handleNewFile">
+<code class="descclassname">handlers.</code><code class="descname">handleNewFile</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.handleNewFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a PDF file that has just appeared in the drop folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the new PDF file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.handleNewHTML">
+<code class="descclassname">handlers.</code><code class="descname">handleNewHTML</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.handleNewHTML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle an HTML file that has just appeared in the drop folder. The
+HTML file is treated as a request for bulk downloading of BibTeX
+entries linked from the HTML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the new HTML file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.handleNewPdf">
+<code class="descclassname">handlers.</code><code class="descname">handleNewPdf</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.handleNewPdf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="handlers.handleRequest">
+<code class="descclassname">handlers.</code><code class="descname">handleRequest</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.handleRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle request created by the command layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the file containing the request.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.ignoreTitleWord">
+<code class="descclassname">handlers.</code><code class="descname">ignoreTitleWord</code><span class="sig-paren">(</span><em>word</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.ignoreTitleWord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given word does not carry meaning, e.g. is an
+article in any language. This is done by matching against each of
+the patters given by the value of the variable
+<code class="docutils literal notranslate"><span class="pre">bibtex-autokey-titleword-ignore</span></code> from the <code class="docutils literal notranslate"><span class="pre">bibtex</span></code> package of
+<code class="docutils literal notranslate"><span class="pre">Emacs</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>word</strong> – The word to be checked.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">False</span></code> if the word carries meaning and <code class="docutils literal notranslate"><span class="pre">True</span></code>     otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.keyExists">
+<code class="descclassname">handlers.</code><code class="descname">keyExists</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.keyExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether a BibTeX entry with the given key exists in the
+papers database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – The BibTeX key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the entry exists and <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.keygen">
+<code class="descclassname">handlers.</code><code class="descname">keygen</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.keygen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a unique BibTeX key for the given entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>entry</strong> – The BibTeX entry.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The generated BibTeX key.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.readBib">
+<code class="descclassname">handlers.</code><code class="descname">readBib</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.readBib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the BibTeX entry contained in the given file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The BibTeX entry.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.readRequest">
+<code class="descclassname">handlers.</code><code class="descname">readRequest</code><span class="sig-paren">(</span><em>fileName</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.readRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the request created by the command layer. The request is
+currently assumed to be contained in the first line of the file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – The name of the file containing the request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The list containing the first word of the request and the     rest of the request.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.requestCode">
+<code class="descclassname">handlers.</code><code class="descname">requestCode</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.requestCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the request type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> – The request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The request type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.requestKey">
+<code class="descclassname">handlers.</code><code class="descname">requestKey</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.requestKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the contents of the request, which is either the BibTeX key
+of the paper for which a PDF is needed or the search string for
+searching for a BibTeX entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> – The request.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The contents of the request.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.saveEntry">
+<code class="descclassname">handlers.</code><code class="descname">saveEntry</code><span class="sig-paren">(</span><em>key</em>, <em>entry</em>, <em>fileName</em>, <em>appendFlag=False</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.saveEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a found BibTeX entry into a file with the given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – The BibTeX key for the new entry.</li>
+<li><strong>entry</strong> – The new BibTeX entry to be added.</li>
+<li><strong>fileName</strong> – The name of the file into which the entry is to     be put.</li>
+<li><strong>appendFlag</strong> – The entry should be appended to the file if the     value is <code class="docutils literal notranslate"><span class="pre">True</span></code> and replace all the existing entries in the file     otherwise.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="handlers.unduplicateKey">
+<code class="descclassname">handlers.</code><code class="descname">unduplicateKey</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#handlers.unduplicateKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a letter to the given BibTeX key in the case that an entry with this key already exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – The BibTeX key to be checked for duplicates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The unique key based on the given one.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LiteRef Server 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Meir Goldenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

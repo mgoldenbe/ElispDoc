@@ -1,0 +1,324 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>online_sources module &#8212; LiteRef Server 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LiteRef Server 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-online_sources">
+<span id="online-sources-module"></span><h1>online_sources module<a class="headerlink" href="#module-online_sources" title="Permalink to this headline">¶</a></h1>
+<p>This module contains classes representing online sources for
+searches. These classes implement standard interfaces, so that the
+user can implement additional sources. To avoid repeating the
+documentation, the variables and the functions are documented once in
+a dummy class <a class="reference internal" href="#online_sources.DummySource" title="online_sources.DummySource"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DummySource</span></code></a>.</p>
+<dl class="class">
+<dt id="online_sources.DBLP">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">DBLP</code><a class="headerlink" href="#online_sources.DBLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DBLP.</p>
+<dl class="staticmethod">
+<dt id="online_sources.DBLP.afterLinkForBib">
+<em class="property">static </em><code class="descname">afterLinkForBib</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DBLP.afterLinkForBib" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.afterLinkForBib" title="online_sources.DummySource.afterLinkForBib"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.afterLinkForBib()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.DBLP.allBibLinks">
+<em class="property">static </em><code class="descname">allBibLinks</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DBLP.allBibLinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.allBibLinks" title="online_sources.DummySource.allBibLinks"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.allBibLinks()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.DBLP.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DBLP.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.bibEntry" title="online_sources.DummySource.bibEntry"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.bibEntry()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DBLP.name">
+<code class="descname">name</code><em class="property"> = 'DBLP'</em><a class="headerlink" href="#online_sources.DBLP.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.name" title="online_sources.DummySource.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.name</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DBLP.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'http://dblp.uni-trier.de/search?q='</em><a class="headerlink" href="#online_sources.DBLP.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.queryAddress" title="online_sources.DummySource.queryAddress"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.queryAddress</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="online_sources.DummySource">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">DummySource</code><a class="headerlink" href="#online_sources.DummySource" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dummy source class used to document the variables and the
+methods that appear in the resources. Note that some of the
+methods are applicable only for sources containing BibTeX/PDF
+resources. Such cases are clearly indicated.</p>
+<dl class="staticmethod">
+<dt id="online_sources.DummySource.afterLinkForBib">
+<em class="property">static </em><code class="descname">afterLinkForBib</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DummySource.afterLinkForBib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the position in the given HTML page following the
+<code class="docutils literal notranslate"><span class="pre">href</span></code> element containing the direct link to the page with
+the sought BibTeX entry. Sources that do not provide BibTeX
+entries or in which the BibTeX entries appear on the HTML page
+containing the search results itself do not implement this
+function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>driver</strong> – The web driver for <code class="docutils literal notranslate"><span class="pre">selenium</span></code>. See         <a class="reference internal" href="get_resource.html#get_resource.driver" title="get_resource.driver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">get_resource.driver</span></code></a>.</li>
+<li><strong>page</strong> – The HTML page returned by the search.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of two elements. The first element is the         possibly modified HTML page. The second element is the start         position of the direct link to the page with the sought         BibTeX entry. If such position is not found, then this element         is -1.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.DummySource.afterLinkForPDF">
+<em class="property">static </em><code class="descname">afterLinkForPDF</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DummySource.afterLinkForPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the position in the given HTML page following the
+<code class="docutils literal notranslate"><span class="pre">href</span></code> element containing the direct link to the page with
+the sought PDF. Sources that do not provide PDFs do not
+implement this function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>driver</strong> – The web driver for <code class="docutils literal notranslate"><span class="pre">selenium</span></code>. See         <a class="reference internal" href="get_resource.html#get_resource.driver" title="get_resource.driver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">get_resource.driver</span></code></a>.</li>
+<li><strong>page</strong> – The HTML page returned by the search.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of two elements. The first element is the         possibly modified HTML page. The second element is the start         position of the direct link to the page with the sought         PDF. If such position is not found, then this element is -1.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="online_sources.DummySource.allBibLinks">
+<code class="descname">allBibLinks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DummySource.allBibLinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the list of all links to BibTeX entries for the given HTML page. This method is used by <a class="reference internal" href="handlers.html#handlers.handleNewHTML" title="handlers.handleNewHTML"><code class="xref py py-mod docutils literal notranslate"><span class="pre">handlers.handleNewHTML</span></code></a>.
+:param page: The HTML page containing the BibTeX entries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The list of links to BibTeX entries.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.DummySource.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.DummySource.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first BibTeX entry located on the current page of
+the given web driver. Sources that do not provide BibTeX
+entries do not implement this function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>driver</strong> – The web driver for <code class="docutils literal notranslate"><span class="pre">selenium</span></code>. See         <a class="reference internal" href="get_resource.html#get_resource.driver" title="get_resource.driver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">get_resource.driver</span></code></a>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The first BibTeX entry located on the current page.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DummySource.name">
+<code class="descname">name</code><em class="property"> = 'Dummy'</em><a class="headerlink" href="#online_sources.DummySource.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the source that will appear in the dialogue windows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DummySource.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'https://dummy.com/search?q='</em><a class="headerlink" href="#online_sources.DummySource.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>The prefix of the address for search requests in the source.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DummySource.redirections">
+<code class="descname">redirections</code><em class="property"> = True</em><a class="headerlink" href="#online_sources.DummySource.redirections" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the source uses <code class="docutils literal notranslate"><span class="pre">http</span></code> redirections, which need
+to be followed when looking for the paper PDF, and <code class="docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. This variable is only applicable to sources providing
+links to PDFs stored on third-party servers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.DummySource.searchPageElementName">
+<code class="descname">searchPageElementName</code><em class="property"> = 'link-element'</em><a class="headerlink" href="#online_sources.DummySource.searchPageElementName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the HTML class of the element on the query page
+whose appearance signifies that the results of the search can be
+read. Sources in which no particular element needs to appear do
+not define this variable.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="online_sources.GoogleScholar">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">GoogleScholar</code><a class="headerlink" href="#online_sources.GoogleScholar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Google Scholar.</p>
+<dl class="staticmethod">
+<dt id="online_sources.GoogleScholar.afterLinkForBib">
+<em class="property">static </em><code class="descname">afterLinkForBib</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.GoogleScholar.afterLinkForBib" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.afterLinkForBib" title="online_sources.DummySource.afterLinkForBib"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.afterLinkForBib()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.GoogleScholar.afterLinkForPDF">
+<em class="property">static </em><code class="descname">afterLinkForPDF</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.GoogleScholar.afterLinkForPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.afterLinkForPDF" title="online_sources.DummySource.afterLinkForPDF"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.afterLinkForPDF()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.GoogleScholar.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.GoogleScholar.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.bibEntry" title="online_sources.DummySource.bibEntry"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.bibEntry()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.GoogleScholar.name">
+<code class="descname">name</code><em class="property"> = 'Google Scholar'</em><a class="headerlink" href="#online_sources.GoogleScholar.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.name" title="online_sources.DummySource.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.name</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.GoogleScholar.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'https://scholar.google.co.il/scholar?q='</em><a class="headerlink" href="#online_sources.GoogleScholar.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.queryAddress" title="online_sources.DummySource.queryAddress"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.queryAddress</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.GoogleScholar.redirections">
+<code class="descname">redirections</code><em class="property"> = True</em><a class="headerlink" href="#online_sources.GoogleScholar.redirections" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.redirections" title="online_sources.DummySource.redirections"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.redirections</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="online_sources.SemanticScholar">
+<em class="property">class </em><code class="descclassname">online_sources.</code><code class="descname">SemanticScholar</code><a class="headerlink" href="#online_sources.SemanticScholar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Semantic Scholar.</p>
+<dl class="staticmethod">
+<dt id="online_sources.SemanticScholar.afterLinkForPDF">
+<em class="property">static </em><code class="descname">afterLinkForPDF</code><span class="sig-paren">(</span><em>driver</em>, <em>page</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.SemanticScholar.afterLinkForPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.afterLinkForPDF" title="online_sources.DummySource.afterLinkForPDF"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.afterLinkForPDF()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="online_sources.SemanticScholar.bibEntry">
+<em class="property">static </em><code class="descname">bibEntry</code><span class="sig-paren">(</span><em>driver</em><span class="sig-paren">)</span><a class="headerlink" href="#online_sources.SemanticScholar.bibEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.bibEntry" title="online_sources.DummySource.bibEntry"><code class="xref py py-func docutils literal notranslate"><span class="pre">DummySource.bibEntry()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.SemanticScholar.name">
+<code class="descname">name</code><em class="property"> = 'Semantic Scholar'</em><a class="headerlink" href="#online_sources.SemanticScholar.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.name" title="online_sources.DummySource.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.name</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.SemanticScholar.queryAddress">
+<code class="descname">queryAddress</code><em class="property"> = 'https://semanticscholar.org/search?q='</em><a class="headerlink" href="#online_sources.SemanticScholar.queryAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.queryAddress" title="online_sources.DummySource.queryAddress"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.queryAddress</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="online_sources.SemanticScholar.searchPageElementName">
+<code class="descname">searchPageElementName</code><em class="property"> = 'paper-link'</em><a class="headerlink" href="#online_sources.SemanticScholar.searchPageElementName" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation of <a class="reference internal" href="#online_sources.DummySource.searchPageElementName" title="online_sources.DummySource.searchPageElementName"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DummySource.searchPageElementName</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LiteRef Server 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Meir Goldenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
